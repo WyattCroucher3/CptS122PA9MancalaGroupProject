@@ -52,10 +52,11 @@
 // include system libs for ALL platforms. Platform-specific libraries should be imported above.
 #include <iostream> // std::cout, std::cin, std::endl, std::pair, std::make_pair, std::function
 #include <string> // std::string, std::aoti, std::stoi
-#include <vector> // std::vector
+//#include <vector> // std::vector
+#include <list> // std::list
 #include <fstream> // std::fstream
-#include <ostream> // std::ostream
-#include <exception> // std::exception
+//#include <ostream> // std::ostream
+//#include <exception> // std::exception
 #include <map> // std::map
 
 
@@ -64,6 +65,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+//using std::vector;
+using std::list;
 using std::map;
 
 // define standard types

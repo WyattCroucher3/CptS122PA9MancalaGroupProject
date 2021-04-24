@@ -20,7 +20,7 @@ public:
         this->internalUserInfo = {{"description","Unknown"}};
     }
     
-    Error(const UInt errorCode) {
+    Error(UInt errorCode) {
         this->internalErrorCode = errorCode;
         this->internalUserInfo = {};
     }
@@ -48,6 +48,11 @@ public:
         this->internalUserInfo = userInfo;
     }
     
+    /// change the description if needed.
+    ///
+    /// - Postcondition: descriptionn  is updated along with userInfo.
+    /// - Parameter str:  the new description
+    /// - Version: 1.0
     void updateDescription(const std::string str) {
         this->internalDescription = str;
         

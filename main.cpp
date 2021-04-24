@@ -9,12 +9,12 @@ where 'Pocket' is the base class, 'MancalaPocket' and 'BoardPocket' are first le
 classes, and 'GameBoard' is the secondary 
 *******************************************************************************************/
 
+#include "Headers.hpp"
+
 int main(void)
 {
 
-	int star;
-
-
+//	int star;
 
 	return 0;
 }
