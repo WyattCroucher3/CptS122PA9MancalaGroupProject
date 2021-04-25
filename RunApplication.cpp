@@ -1,5 +1,11 @@
 #include "RunApplication.hpp"
 
+
+runApplication::runApplication()
+{
+	pockets::setupMap(this->gameBoard);
+}
+
 void runApplication::runApp() // This is where all the functions will be called for runApplication
 {
 	

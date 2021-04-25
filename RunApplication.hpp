@@ -1,11 +1,14 @@
 #pragma once
 
-#include "Gameboard.hpp"
-#include "pockets.hpp"
+//#include "GameBoard.hpp"
+//#include "pockets.hpp"
+#include "Headers.hpp"
 
 class runApplication
 {
 public:
+	runApplication();
+
 	void runApp();
 
 	void mainMenu();
@@ -21,5 +24,5 @@ public:
 	void determineWinner(); // Counts totals in the 
 
 private:
-	GameBoard gameBoard[14];
+	pockets::pocketMap gameBoard;
 };
