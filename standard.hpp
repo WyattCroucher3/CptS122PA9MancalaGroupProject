@@ -31,6 +31,7 @@
     /* END MACOS */
 #elif defined(__linux__) || defined(linux) || defined(__linux)
     // import Linux-specific libraries as needed.
+
     #include <unistd.h> // sleep
 
     #define CLEAR_SCREEN "clear"
@@ -42,7 +43,6 @@
 #endif
 
 /* END MACROS */
-
 
 // include SFML Libs
 #include <SFML/Audio.hpp>

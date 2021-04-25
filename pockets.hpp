@@ -45,7 +45,7 @@ public:
                   unsigned int & player,
                   const unsigned int & setCount = 4) : Pocket(setID, setCount) {
         this->owner = player;
-        this->updateCount((int)setCount);
+//        this->updateCount((int)setCount);
     }
     
     /// Update the count and image reflecting the new value.
@@ -58,7 +58,7 @@ public:
         sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
         thread.launch(); // will run asynchronously
         
-        this->_count = (unsigned int)newCount;
+//        this->_count = (unsigned int)newCount;
         // update label here
         // this method is virtial because this needs a larger pocket than its sister class `BoardPocket`
     }
@@ -77,7 +77,7 @@ typedef map<string, Pocket*> pocketMap;
 class BoardPocket final : public Pocket {
 public:
     BoardPocket(string & setID, const unsigned int & setCount = 4) : Pocket (setID, setCount) {
-        this->updateCount((int)setCount);
+//        this->updateCount((int)setCount);
     }
     
     /// Update the count and image reflecting the new value.
@@ -137,8 +137,25 @@ void setupMap(map<string, Pocket*> & target) {
 /// - Parameter key:  the key to reverse
 /// - Returns: the new key
 /// - Version: 1.0
-inline unsigned int getOppositeFromKey(unsigned int & key) {
-    return (key < 10 ? 11 : 1) + 6 - (key % 10);
+inline string getOppositeFromKey(string & _key) noexcept {
+    int key = atoi(&_key[1]);
+    
+    if (_key[0] == 'B') {
+        key += 10;
+    } else if (_key[0] == 'A');/* VERIFY KEY IS VALID */
+      else {
+        return "";
+    }
+    
+    key = (key < 10 ? 11 : 1) + 6 - (key % 10);
+    
+    string rtnKey = "";
+    
+    rtnKey += key < 10 ? 'A' : 'B';
+    
+    rtnKey += key % 10;
+    
+    return rtnKey;
 }
 
 }

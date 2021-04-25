@@ -14,5 +14,6 @@
 #include "Error.hpp"
 #include "MusicPlayer.hpp"
 #include "pockets.hpp"
+#include "GameBoard.hpp"
 
 #endif /* Headers_hpp */
