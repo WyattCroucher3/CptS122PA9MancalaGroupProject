@@ -1,2 +1,2 @@
-#include "MancalaPocket.h"
+#include "pockets.hpp"
 

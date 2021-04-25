@@ -1,10 +1,10 @@
-#include "GameBoard.h"
+#include "GameBoard.hpp"
 
 GameBoard::GameBoard()
 {
-	this->gameBoard[0] = new BoardPocket;
-	this->gameBoard[1] = new BoardPocket;
-	this->gameBoard[2] = new BoardPocket;
+	gameBoard[0] = new BoardPocket;
+	gameBoard[1] = new BoardPocket;
+	gameBoard[2] = new BoardPocket;
 	this->gameBoard[3] = new BoardPocket;
 	this->gameBoard[4] = new BoardPocket;
 	this->gameBoard[5] = new BoardPocket;

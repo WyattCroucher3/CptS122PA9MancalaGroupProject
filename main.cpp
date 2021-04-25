@@ -14,7 +14,6 @@ classes, and 'GameBoard' is the secondary
 int main(void)
 {
 
-//	int star;
 
 	return 0;
 }

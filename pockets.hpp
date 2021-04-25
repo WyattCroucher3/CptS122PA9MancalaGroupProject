@@ -10,7 +10,11 @@
 #define pockets_hpp
 
 namespace pockets {
-class Pocket {
+class Pocket 
+{
+public:
+    int getCount() const;
+
 protected:
     unsigned int ID;
     unsigned int count;
