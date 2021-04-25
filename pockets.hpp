@@ -6,8 +6,11 @@
 //  Copyright © 2021 Kyle Parker. All rights reserved.
 //
 
-#ifndef pockets_hpp
-#define pockets_hpp
+#pragma once
+
+#include <iostream>
+
+using std::string;
 
 namespace pockets {
 
@@ -140,4 +143,3 @@ inline unsigned int getOppositeFromKey(unsigned int & key) {
 
 }
 
-#endif /* pockets_hpp */

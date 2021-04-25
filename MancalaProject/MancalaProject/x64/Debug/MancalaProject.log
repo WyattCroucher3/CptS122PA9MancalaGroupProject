@@ -1,0 +1,238 @@
+﻿  BoardPocket.cpp
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C3646: 'ID': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(18,15): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C3646: 'image': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(20,11): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(21,15): error C2039: 'ID': is not a member of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(14): message : see declaration of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(21,20): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(22,24): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(41,18): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(43,63): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(43,70): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(44,23): error C2065: 'player': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(45,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(56,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(76,16): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(76,78): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(76,85): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(77,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(88,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ')' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2059: syntax error: '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,44): error C2059: syntax error: ')'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2143: syntax error: missing ';' before '{'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2447: '{': missing function header (old-style formal list?)
+  GameBoard.cpp
+E:\Documents-data\GitHub\main\pockets.hpp(18,15): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C3646: 'image': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(56,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(88,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ')' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2059: syntax error: '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,44): error C2059: syntax error: ')'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2143: syntax error: missing ';' before '{'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2447: '{': missing function header (old-style formal list?)
+E:\Documents-data\GitHub\main\GameBoard.hpp(26,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(26,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(27,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(27,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(28,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(28,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(29,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(29,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(30,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(30,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(31,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(31,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(32,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(32,34): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(33,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(33,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(34,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(34,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(35,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(35,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(36,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(36,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(37,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(37,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(38,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(38,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\GameBoard.hpp(39,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\GameBoard.hpp(39,35): error C2238: unexpected token(s) preceding ';'
+  main.cpp
+E:\Documents-data\GitHub\main\standard.hpp(48,10): fatal error C1083: Cannot open include file: 'SFML/Audio.hpp': No such file or directory
+  MancalaPocket.cpp
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C3646: 'ID': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(18,15): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C3646: 'image': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(20,11): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(21,15): error C2039: 'ID': is not a member of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(14): message : see declaration of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(21,20): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(22,24): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(41,18): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(43,63): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(43,70): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(44,23): error C2065: 'player': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(45,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(56,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(76,16): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(76,78): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(76,85): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(77,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(88,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ')' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2059: syntax error: '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,44): error C2059: syntax error: ')'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2143: syntax error: missing ';' before '{'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2447: '{': missing function header (old-style formal list?)
+  Pocket.cpp
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C3646: 'ID': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(16,14): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(18,15): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C3646: 'image': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(20,11): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(21,15): error C2039: 'ID': is not a member of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(14): message : see declaration of 'pockets::Pocket'
+E:\Documents-data\GitHub\main\pockets.hpp(21,20): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(22,24): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(41,18): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(43,63): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(43,70): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(44,23): error C2065: 'player': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(45,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(56,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(76,16): error C2061: syntax error: identifier 'string'
+E:\Documents-data\GitHub\main\pockets.hpp(76,78): error C2065: 'setID': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(76,85): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(77,32): error C2065: 'setCount': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(88,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ')' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2059: syntax error: '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,44): error C2059: syntax error: ')'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2143: syntax error: missing ';' before '{'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2447: '{': missing function header (old-style formal list?)
+E:\Documents-data\GitHub\main\Pocket.cpp(5,9): error C2065: '_count': undeclared identifier
+  RunApplication.cpp
+E:\Documents-data\GitHub\main\pockets.hpp(18,15): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C3646: 'image': unknown override specifier
+E:\Documents-data\GitHub\main\pockets.hpp(18,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(55,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(55,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(55,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(56,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(72,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'sf': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,13): error C2065: 'Thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C2146: syntax error: missing ';' before identifier 'thread'
+E:\Documents-data\GitHub\main\pockets.hpp(87,1): error C2653: 'MusicPlayer': is not a class or namespace name
+E:\Documents-data\GitHub\main\pockets.hpp(87,41): error C2065: 'placeMarble': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(87,20): error C3861: 'thread': identifier not found
+E:\Documents-data\GitHub\main\pockets.hpp(88,9): error C2065: 'thread': undeclared identifier
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ')' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2143: syntax error: missing ';' before '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,18): error C2059: syntax error: '<'
+E:\Documents-data\GitHub\main\pockets.hpp(103,44): error C2059: syntax error: ')'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2143: syntax error: missing ';' before '{'
+E:\Documents-data\GitHub\main\pockets.hpp(103,46): error C2447: '{': missing function header (old-style formal list?)
+E:\Documents-data\GitHub\main\Gameboard.hpp(26,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(26,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(27,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(27,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(28,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(28,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(29,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(29,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(30,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(30,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(31,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(31,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(32,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(32,34): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(33,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(33,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(34,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(34,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(35,15): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(35,32): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(36,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(36,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(37,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(37,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(38,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(38,33): error C2238: unexpected token(s) preceding ';'
+E:\Documents-data\GitHub\main\Gameboard.hpp(39,16): error C2059: syntax error: '='
+E:\Documents-data\GitHub\main\Gameboard.hpp(39,35): error C2238: unexpected token(s) preceding ';'
+  Generating Code...
