@@ -24,10 +24,6 @@
 #elif defined(__APPLE__) || defined(__MACH__)
     // import macOS-specific libraries as needed.
     #include <unistd.h> // sleep
-                        // include SFML Libs
-    #include <SFML/Audio.hpp>
-    #include <SFML/Graphics.hpp>
-    #include <SFML/System.hpp>
 
     #define CLEAR_SCREEN "clear"
     #define RETURN_KEY_UPPER "RETURN"
@@ -35,10 +31,6 @@
     /* END MACOS */
 #elif defined(__linux__) || defined(linux) || defined(__linux)
     // import Linux-specific libraries as needed.
-    // include SFML Libs
-    #include <SFML/Audio.hpp>
-    #include <SFML/Graphics.hpp>
-    #include <SFML/System.hpp>
 
     #include <unistd.h> // sleep
 
@@ -51,6 +43,11 @@
 #endif
 
 /* END MACROS */
+
+// include SFML Libs
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 // include system libs for ALL platforms. Platform-specific libraries should be imported above.
 #include <iostream> // std::cout, std::cin, std::endl, std::pair, std::make_pair, std::function
