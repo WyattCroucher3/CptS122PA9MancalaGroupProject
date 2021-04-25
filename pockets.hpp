@@ -101,8 +101,6 @@ void setupMap(map<unsigned int, Pocket*> & target) {
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
                 
                 target.insert(std::make_pair(key, pocket));
-                
-//                target[key] = pocket;
             }
         } else { // BoardPockets.
             for (unsigned int second = 1; second <= 6; second += 1) {
@@ -112,8 +110,6 @@ void setupMap(map<unsigned int, Pocket*> & target) {
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
                 
                 target.insert(std::make_pair(key, pocket));
-                
-//                target[key] = pocket;
             }
         }
     }

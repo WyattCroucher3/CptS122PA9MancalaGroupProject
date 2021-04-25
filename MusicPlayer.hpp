@@ -10,7 +10,7 @@
 #define MusicPlayer_hpp
 
 
-/// Contains functions that handle the sf::Music library.
+/// Contains functions that handle sounds throughout game.
 namespace MusicPlayer {
     
 /// Play music at the path for a certian rep.
@@ -63,7 +63,7 @@ void playMusicWithV(const std::vector<std::string> & data) {
 /// - Parameter: path - the path to the file.
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
-void playMusicAtPath(const std::string & path) {
+inline void playMusicAtPath(const std::string & path) {
     playMusic(path);
 }
 
@@ -72,27 +72,36 @@ void playMusicAtPath(const std::string & path) {
 /// - Precondition: game about to end and side needs to be collected.
 /// - Postcondition: sound played.
 /// - Version: 1.0
-void collectSide(void) {
+inline void collectSide(void) {
     playMusic("Audio/Collect Side.wav");
 }
 
-/// sound when a certian amount of marbles will be present. Ex. 0 marbles are in hole, one was just placed.
+/// sound when a certian amount of marbles will be present.
+///
+/// NOTE: Pass the new value in. passing in the current value may result in incorrect sound playing.
 ///
 /// - Precondition: marble was dropped.
 /// - Postcondition: sound played.
 /// - Parameter count:  the number of marbles that are now in the hole, including the recently added one.
 /// - Version: 1.0
-void placeMarble(int & count) {
-    if (count >= 1 && count <= 7) {
+inline void placeMarble(int & count) {
+    if (count < 0) { throw Error("Out of range. Value cannot be negative."); }
+    
+    switch (count) {
+    case 0:
+        playMusic("Audio/Pickup Marbles.wav");
+        break;
+    case 1: case 2: case 3: case 4: case 5: case 6:
+        
         std::string path = "Audio/Place ";
         path += std::to_string(count);
         path += " Marble.wav";
         
         playMusic(path);
-    } else if (count == 0) {
-        playMusic("Audio/Pickup Marbles.wav");
-    } else {
-        throw Error("Out of range.");
+        break;
+    default: // >= 7
+        playMusic("Audio/Place 7 Marbles.wav");
+        break;
     }
     
 }
@@ -102,7 +111,7 @@ void placeMarble(int & count) {
 /// - Precondition: User clicked reset
 /// - Postcondition: Sound Played
 /// - Version: 1.0
-void resetSound(void) {
+inline void resetSound(void) {
     playMusic("Audio/Reset.wav");
 }
 
@@ -111,7 +120,7 @@ void resetSound(void) {
 /// - Precondition: game resetting
 /// - Postcondition: sound played.
 /// - Version: 1.0
-void setupSound(void) {
+inline void setupSound(void) {
     playMusic("Audio/Setup Marble.wav");
 }
 
