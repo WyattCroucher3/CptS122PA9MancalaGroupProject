@@ -10,10 +10,12 @@ classes, and 'GameBoard' is the secondary
 *******************************************************************************************/
 
 #include "Headers.hpp"
+#include "RunApplication.hpp"
 
 int main(void)
 {
-
+	runApplication app;
+	app.runApp();
 
 	return 0;
 }
