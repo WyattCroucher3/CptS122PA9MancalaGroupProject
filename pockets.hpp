@@ -14,12 +14,12 @@ namespace pockets {
 class Pocket {
 protected:
     string ID;
-    unsigned int count;
+    unsigned int _count;
     sf::Image image;
     
     Pocket(string & setID, const unsigned int & setCount) {
         this->ID = setID;
-        this->count = setCount;
+        this->_count = setCount;
     }
 public:
     /// Update the count and image reflecting the new value.
@@ -29,6 +29,10 @@ public:
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
     virtual void updateCount(const int & newCount) = 0;
+    
+    unsigned int count() const {
+        return this->_count;
+    }
 };
 
 class MancalaPocket final : public Pocket {
@@ -51,7 +55,7 @@ public:
         sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
         thread.launch(); // will run asynchronously
         
-        this->count = (unsigned int)newCount;
+        this->_count = (unsigned int)newCount;
         // update label here
         // this method is virtial because this needs a larger pocket than its sister class `BoardPocket`
     }
@@ -83,7 +87,7 @@ public:
         sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
         thread.launch(); // will run asynchronously
         
-        this->count = (unsigned int)newCount;
+        this->_count = (unsigned int)newCount;
         // update label here
         // this method is virtial because this needs a smaller pocket than its sister class `MancalaPocket`
     }
