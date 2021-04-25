@@ -87,22 +87,20 @@ inline void collectSide(void) {
 inline void placeMarble(int & count) {
     if (count < 0) { throw Error("Out of range. Value cannot be negative."); }
     
+    std::string path = "Audio/Place ";
     switch (count) {
     case 0:
-        playMusic("Audio/Pickup Marbles.wav");
+        path += "Marbles.wav";
         break;
     case 1: case 2: case 3: case 4: case 5: case 6:
-        
-        std::string path = "Audio/Place ";
         path += std::to_string(count);
         path += " Marble.wav";
-        
-        playMusic(path);
         break;
     default: // >= 7
-        playMusic("Audio/Place 7 Marbles.wav");
+        path += "7 Marbles.wav";
         break;
     }
+    playMusic(path);
     
 }
 

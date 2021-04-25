@@ -10,12 +10,18 @@
 #define pockets_hpp
 
 namespace pockets {
+
 class Pocket {
 protected:
-    unsigned int ID;
+    string ID;
     unsigned int count;
     sf::Image image;
     
+    Pocket(string & setID, const unsigned int & setCount) {
+        this->ID = setID;
+        this->count = setCount;
+    }
+public:
     /// Update the count and image reflecting the new value.
     ///
     /// - Precondition: marble was dropped or hole was picked up
@@ -23,17 +29,14 @@ protected:
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
     virtual void updateCount(const int & newCount) = 0;
-    
-    Pocket(unsigned int & setID, const unsigned int & setCount) {
-        this->ID = setID;
-        this->count = setCount;
-    }
 };
 
 class MancalaPocket final : public Pocket {
     unsigned int owner;
 public:
-    MancalaPocket(unsigned int & setID, unsigned int & player, const unsigned int & setCount = 4) : Pocket(setID, setCount) {
+    MancalaPocket(string & setID,
+                  unsigned int & player,
+                  const unsigned int & setCount = 4) : Pocket(setID, setCount) {
         this->owner = player;
         this->updateCount((int)setCount);
     }
@@ -62,9 +65,11 @@ public:
     inline bool ownsPocket(unsigned int & key) const { return owner == 1 ? key < 10 : key > 10; }
 };
 
+typedef map<string, Pocket*> pocketMap;
+
 class BoardPocket final : public Pocket {
 public:
-    BoardPocket(unsigned int & setID, const unsigned int & setCount = 4) : Pocket (setID, setCount) {
+    BoardPocket(string & setID, const unsigned int & setCount = 4) : Pocket (setID, setCount) {
         this->updateCount((int)setCount);
     }
     
@@ -91,11 +96,12 @@ public:
 /// - Postcondition: map is setup
 /// - Parameter target:  the empty map to set values to
 /// - Version: 1.0
-void setupMap(map<unsigned int, Pocket*> & target) {
+void setupMap(map<string, Pocket*> & target) {
     for (unsigned int first = 0; first < 30; first += 10) {
         if (first == 20) { // MancalaPockets.
             for (unsigned int second = 1; second <= 2; second += 1) {
-                unsigned int key = first + second;
+                string key = "P";
+                key += std::to_string(second);
                 
                 MancalaPocket * p = new MancalaPocket(key, second);
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
@@ -103,8 +109,10 @@ void setupMap(map<unsigned int, Pocket*> & target) {
                 target.insert(std::make_pair(key, pocket));
             }
         } else { // BoardPockets.
-            for (unsigned int second = 1; second <= 6; second += 1) {
-                unsigned int key = first + second;
+            for (int second = 1; second <= 6; second += 1) {
+                string key = first == 10 ? "B" : "A";
+                
+                key += std::to_string(second);
                 
                 BoardPocket * p = new BoardPocket(key);
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
