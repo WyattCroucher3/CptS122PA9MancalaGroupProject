@@ -9,7 +9,6 @@ where 'Pocket' is the base class, 'MancalaPocket' and 'BoardPocket' are first le
 classes, and 'GameBoard' is the secondary 
 *******************************************************************************************/
 
-#include "Headers.hpp"
 #include "RunApplication.hpp"
 
 int main(void)

@@ -69,7 +69,7 @@ public:
     std::map<std::string, std::string> userInfo() { return this->internalUserInfo; }
 };
 
-std::ostream & operator <<(std::ostream & lhs, Error & rhs) {
+inline std::ostream & operator <<(std::ostream & lhs, Error & rhs) {
     return lhs << "Description: " << rhs.description() << "\nCode: " << rhs.code() << "\nUserInfo: ";// << rhs.userInfo();
 }
 

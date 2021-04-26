@@ -8,10 +8,6 @@
 
 #pragma once
 
-#include <iostream>
-
-using std::string;
-
 namespace pockets {
 
 class Pocket {
@@ -58,9 +54,7 @@ public:
         sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
         thread.launch(); // will run asynchronously
         
-//        this->_count = (unsigned int)newCount;
-        // update label here
-        // this method is virtial because this needs a larger pocket than its sister class `BoardPocket`
+        this->_count = (unsigned int)newCount;
     }
     
     /// get wether or not the pocket is owned by this player by passing in a key.
@@ -91,8 +85,6 @@ public:
         thread.launch(); // will run asynchronously
         
         this->_count = (unsigned int)newCount;
-        // update label here
-        // this method is virtial because this needs a smaller pocket than its sister class `MancalaPocket`
     }
 };
 
@@ -103,7 +95,7 @@ public:
 /// - Postcondition: map is setup
 /// - Parameter target:  the empty map to set values to
 /// - Version: 1.0
-void setupMap(map<string, Pocket*> & target) {
+inline void setupMap(map<string, Pocket*> & target) {
     for (unsigned int first = 0; first < 30; first += 10) {
         if (first == 20) { // MancalaPockets.
             for (unsigned int second = 1; second <= 2; second += 1) {

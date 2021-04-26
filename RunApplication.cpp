@@ -5,7 +5,7 @@
 runApplication::runApplication()
 {
 	pockets::setupMap(this->gameBoard);
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 }
 
 void runApplication::runApp() // This is where all the functions will be called for runApplication
@@ -45,7 +45,7 @@ void runApplication::runApp() // This is where all the functions will be called 
 
 				gameOver = endOfGame(); // Checks to see if the game has ended
 
-				if (endOfGame == false)
+                if (endOfGame() == false)
 				{
 					switchTurns(turn); // If the game isn't over, the players switch turns
 				}

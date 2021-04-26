@@ -52,11 +52,8 @@
 // include system libs for ALL platforms. Platform-specific libraries should be imported above.
 #include <iostream> // std::cout, std::cin, std::endl, std::pair, std::make_pair, std::function
 #include <string> // std::string, std::aoti, std::stoi
-//#include <vector> // std::vector
 #include <list> // std::list
 #include <fstream> // std::fstream
-//#include <ostream> // std::ostream
-//#include <exception> // std::exception
 #include <map> // std::map
 
 
@@ -65,7 +62,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
-//using std::vector;
 using std::list;
 using std::map;
 
@@ -77,14 +73,14 @@ std::ostream & operator <<(std::ostream & lhs, std::map<std::string, std::string
 
 namespace kp {
 // define protocol stubs
-void checkOS(void);
-void fatalError(std::string);
+inline void checkOS(void);
+inline void fatalError(std::string);
 
-std::string strToLower(const std::string &str);
-std::string strToUpper(const std::string &str);
+inline std::string strToLower(const std::string &str);
+inline std::string strToUpper(const std::string &str);
 
-bool isnumber(const std::string &str);
-bool getYesNo(void);
+inline bool isnumber(const std::string &str);
+inline bool getYesNo(void);
 
 inline void clearScreen(void);
 inline void waitForReturn(bool shouldClear = false);
@@ -99,7 +95,7 @@ template <typename T> inline bool isYes(T value);
 /// - Postcondition: Warning was issued if requred
 /// - seealso: functions.hpp
 /// - version: 1.0
-void checkOS() {
+inline void checkOS() {
 #if defined(UNSUPPORTED_OS)
     std::cout << "[WARN] Unsupported Operating System! (" << UNSUPPORTED_OS << ")" << std::endl;
 #endif
@@ -114,7 +110,7 @@ void checkOS() {
 /// - Parameter ... : the variable list to run through.
 /// - seealso: [Microsoft Docs, "Functions with Variable Argument Lists (C++)"] (https://docs.microsoft.com/en-us/cpp/cpp/functions-with-variable-argument-lists-cpp?view=msvc-160)
 /// - version: 1.1
-void fatalError(std::string reason) {
+inline void fatalError(std::string reason) {
     std::cout << "Fatal Error: " << reason << std::endl;
     abort();
 }
@@ -125,7 +121,7 @@ void fatalError(std::string reason) {
 /// - Warning: not localized, undefined behavior may occur with non-ascii characters
 /// - Parameter str: the string ot lowercase
 /// - version: 1.0
-std::string strToLower(const std::string &str) {
+inline std::string strToLower(const std::string &str) {
     std::string newStr = "";
     
     for (char ch : str) {
@@ -141,7 +137,7 @@ std::string strToLower(const std::string &str) {
 /// - Warning: not localized, undefined behavior may occur with non-ascii characters
 /// - Parameter str: the string to uppercase
 /// - version: 1.0
-std::string strToUpper(const std::string &str) {
+inline std::string strToUpper(const std::string &str) {
     std::string newStr = "";
     
     for (char ch : str) {
@@ -158,7 +154,7 @@ std::string strToUpper(const std::string &str) {
 /// - Parameter str:  the string to check for numbers
 /// - Returns: bool indicating if the string is a number.
 /// - Version: 1.0
-bool isnumber(const std::string &str) {
+inline bool isnumber(const std::string &str) {
     for (auto ch : str) {
         if (!isdigit(ch)) {
             return false;
@@ -173,7 +169,7 @@ bool isnumber(const std::string &str) {
 /// - Postcondition: bool is returned, true for yes, false for no
 /// - Returns: boolean indicating success
 /// - version: 1.0
-bool getYesNo(void) {
+inline bool getYesNo(void) {
     std::string str;
     std::cout << "(y)es/(n)o\n>";
     std::cin >> str;
@@ -239,7 +235,7 @@ inline void waitForReturn(bool shouldClear) {
 /// - Parameter rhs:  the data to insert
 /// - Returns: the stream, including data from the map.
 /// - Version: 1.0
-std::ostream & operator <<(std::ostream & lhs, std::map<std::string, std::string> & rhs) {
+inline std::ostream & operator <<(std::ostream & lhs, std::map<std::string, std::string> & rhs) {
     std::ostream & rtnVal = lhs;
     rtnVal << "{";
     

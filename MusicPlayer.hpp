@@ -21,7 +21,7 @@ namespace MusicPlayer {
 /// - Parameter: data - a vector that contains exactly two values;
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
-void playMusic(const std::string & path, const int & count = 1) {
+inline void playMusic(const std::string & path, const int & count = 1) {
     sf::Music music;
     
     int x = 0;
@@ -47,7 +47,7 @@ void playMusic(const std::string & path, const int & count = 1) {
 /// - Parameter: data - a vector that contains exactly two values;
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
-void playMusicWithV(const std::vector<std::string> & data) {
+inline void playMusicWithV(const std::vector<std::string> & data) {
     if (data.size() == 2) {
         playMusic(data.at(0), stoi(data.at(1)));
     } else {
