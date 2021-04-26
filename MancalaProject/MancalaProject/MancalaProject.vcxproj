@@ -144,10 +144,8 @@
     <ClInclude Include="..\..\RunApplication.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\BoardPocket.cpp" />
     <ClCompile Include="..\..\GameBoard.cpp" />
     <ClCompile Include="..\..\main.cpp" />
-    <ClCompile Include="..\..\MancalaPocket.cpp" />
     <ClCompile Include="..\..\Pocket.cpp" />
     <ClCompile Include="..\..\RunApplication.cpp" />
   </ItemGroup>
