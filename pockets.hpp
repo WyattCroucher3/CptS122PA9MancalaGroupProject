@@ -45,7 +45,7 @@ public:
                   unsigned int & player,
                   const unsigned int & setCount = 4) : Pocket(setID, setCount) {
         this->owner = player;
-        this->updateCount((int)setCount); // may need to update
+//        this->updateCount((int)setCount);
     }
     
     /// Update the count and image reflecting the new value.
@@ -58,6 +58,8 @@ public:
         sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
         thread.launch(); // will run asynchronously
         
+//        this->_count = (unsigned int)newCount;
+        // update label here
         // this method is virtial because this needs a larger pocket than its sister class `BoardPocket`
     }
     
@@ -75,7 +77,7 @@ typedef map<string, Pocket*> pocketMap;
 class BoardPocket final : public Pocket {
 public:
     BoardPocket(string & setID, const unsigned int & setCount = 4) : Pocket (setID, setCount) {
-        this->updateCount((int)setCount); // may need to update
+//        this->updateCount((int)setCount);
     }
     
     /// Update the count and image reflecting the new value.
