@@ -1,9 +1,11 @@
 #include "RunApplication.hpp"
+#include <time.h>
 
 
 runApplication::runApplication()
 {
 	pockets::setupMap(this->gameBoard);
+	srand(time(NULL));
 }
 
 void runApplication::runApp() // This is where all the functions will be called for runApplication
@@ -31,7 +33,10 @@ void runApplication::displayRules()
 
 int runApplication::whoGoesFirst() // Function return a random integer (1 or 2) to determine which player goes first
 {
-
+	int player = 0;
+	player = rand() % 2 + 1;
+	
+	return player;
 }
 
 void runApplication::selectPocket() // User selects a pocket to begin their turn; function validates the choice as a valid option
