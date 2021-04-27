@@ -54,7 +54,7 @@
 #include <string> // std::string, std::aoti, std::stoi
 #include <list> // std::list
 #include <fstream> // std::fstream
-#include <map> // std::map
+#include <unordered_map> // std::unordered_map
 
 
 //// declare using statements
@@ -63,7 +63,7 @@ using std::cin;
 using std::endl;
 using std::string;
 using std::list;
-using std::map;
+using std::unordered_map;
 
 // define standard types
 typedef unsigned int UInt;

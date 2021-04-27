@@ -66,7 +66,7 @@ public:
     inline bool ownsPocket(unsigned int & key) const { return owner == 1 ? key < 10 : key > 10; }
 };
 
-typedef map<string, Pocket*> pocketMap;
+typedef unordered_map<string, Pocket*> pocketMap;
 
 class BoardPocket final : public Pocket {
 public:
@@ -95,7 +95,7 @@ public:
 /// - Postcondition: map is setup
 /// - Parameter target:  the empty map to set values to
 /// - Version: 1.0
-inline void setupMap(map<string, Pocket*> & target) {
+inline void setupMap(unordered_map<string, Pocket*> & target) {
     for (unsigned int first = 0; first < 30; first += 10) {
         if (first == 20) { // MancalaPockets.
             for (unsigned int second = 1; second <= 2; second += 1) {

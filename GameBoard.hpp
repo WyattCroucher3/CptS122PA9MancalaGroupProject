@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma message ("GameBoard.hpp will be removed in future build.")
+
 //#include <iostream>
 //#include <fstream>
 //#include <string>
