@@ -4,7 +4,7 @@ CPTS_122 PA9
 
 Created 2021-04-26
 
-Programmers: Anthony Krupa, Wyatt Croucher, Will Smith, and Kyle Parker.
+Programmers: Anthony Krupa, Wyatt Croucher, Will Foster, and Kyle Parker.
 
 Libraries: SFML
 
