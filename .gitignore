@@ -5,3 +5,4 @@
 /.vs/slnx.sqlite
 /.vs
 .DS_Store
+pockets_unit_test.hpp

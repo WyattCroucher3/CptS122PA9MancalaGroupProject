@@ -8,6 +8,9 @@
 
 #pragma once
 
+#define ABORT_IF_KEY_NOT_2 if (key.size() > 2) { cout << "FATAL ERROR: KEY SIZE IS TOO SMALL!!!" << endl << "FUNC CALL: " << __FUNCTION__ << endl; std::abort(); }
+#define END_A (key == "A6")
+
 namespace pockets {
 
 class Pocket {
@@ -63,7 +66,11 @@ public:
     /// - Parameter key:  the key to test against.
     /// - Returns:  a boolean that determines if the hole passed via key is owned by this player
     /// - Version: 1.0
-    inline bool ownsPocket(unsigned int & key) const { return owner == 1 ? key < 10 : key > 10; }
+    inline bool ownsPocket(const string & key) const {
+        cout << "Use of " << __FUNCTION__ << " is deprecated!" << endl;
+        ABORT_IF_KEY_NOT_2
+        return (owner == 1 && key[1]== '1') || (owner == 2 && key[1] == '2');
+    }
 };
 
 typedef unordered_map<string, Pocket*> pocketMap;
@@ -95,7 +102,7 @@ public:
 /// - Postcondition: map is setup
 /// - Parameter target:  the empty map to set values to
 /// - Version: 1.0
-inline void setupMap(unordered_map<string, Pocket*> & target) {
+inline void setupMap(unordered_map<string, Pocket*> & target) noexcept {
     for (unsigned int first = 0; first < 30; first += 10) {
         if (first == 20) { // MancalaPockets.
             for (unsigned int second = 1; second <= 2; second += 1) {
@@ -122,6 +129,26 @@ inline void setupMap(unordered_map<string, Pocket*> & target) {
     }
 }
 
+inline void nextPosition(string & key, const unsigned int & playerID) noexcept {
+    ABORT_IF_KEY_NOT_2
+    
+    if (key[0] != 'P' && !(key == "A6" || key == "B1")) {
+        if (key[0] == 'A') {
+            key = {key[0], static_cast<char>(key[1]+1)};
+        } else { // 'B'
+            key = {key[0], static_cast<char>(key[1]-1)};
+        }
+    } else if (key[0] != 'P') {
+        if (key[0] == 'B') {
+            key = playerID == 1 ? "P1" : "A1";
+        } else { // goto P2 or B6
+            key = playerID == 2 ? "P2" : "B6";
+        }
+    } else {
+        key = playerID == 1 ? "A1" : "B6";
+    }
+}
+
 /// get a key corrsponding to the opposite corner
 ///
 /// - Precondition: user placed marble in empty pocket on their side
@@ -129,23 +156,25 @@ inline void setupMap(unordered_map<string, Pocket*> & target) {
 /// - Parameter key:  the key to reverse
 /// - Returns: the new key
 /// - Version: 1.0
-inline string getOppositeFromKey(string & _key) noexcept {
-    int key = atoi(&_key[1]);
+inline string getOppositeFromKey(const string & key) noexcept {
+    ABORT_IF_KEY_NOT_2
     
-    if (_key[0] == 'B') {
-        key += 10;
-    } else if (_key[0] == 'A');/* VERIFY KEY IS VALID */
+    int keyi = atoi(&key[1]);
+    
+    if (key[0] == 'B') {
+        keyi += 10;
+    } else if (key[0] == 'A');/* VERIFY KEY IS VALID */
       else {
         return "";
     }
     
-    key = (key < 10 ? 11 : 1) + 6 - (key % 10);
+    keyi = (keyi < 10 ? 11 : 1) + 6 - (keyi % 10);
     
     string rtnKey = "";
     
-    rtnKey += key < 10 ? 'A' : 'B';
+    rtnKey += keyi < 10 ? 'A' : 'B';
     
-    rtnKey += key % 10;
+    rtnKey += keyi % 10;
     
     return rtnKey;
 }
