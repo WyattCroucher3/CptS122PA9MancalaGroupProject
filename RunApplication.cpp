@@ -1,11 +1,17 @@
 #include "RunApplication.hpp"
 #include <time.h>
-
+	
+sf::Texture runApplication::boardTexture;
+sf::Texture runApplication::marbleTexture1;
+sf::Texture runApplication::marbleTexture0;
 
 runApplication::runApplication()
 {
 	pockets::setupMap(this->gameBoard);
 	srand((unsigned int)time(NULL));
+	runApplication::boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
+	runApplication::marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
+	runApplication::marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
 }
 
 //void runApplication::runApp() // This is where all the functions will be called for runApplication
@@ -75,38 +81,87 @@ void runApplication::runApp() {
 
 	// Initialize Window, Textures, and Sprites
 	sf::RenderWindow window(sf::VideoMode(800, 300), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
-
-	// Textures
-	sf::Texture boardTexture;
-	boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
-	sf::Texture marbleTexture0;
-	marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
-	sf::Texture marbleTexture1;
-	marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
+	window.setFramerateLimit(5);
+	// Who goes first
+	whoGoesFirst();
 
 	// create board sprite
 	sf::Sprite boardSprite;
 
 	// set Textures for board
-	boardSprite.setTexture(boardTexture);
+	boardSprite.setTexture(runApplication::boardTexture);
 
+	// initialize board with marbles
+	int offset = 13;
 	for (auto kb : gameBoard) {
+
+
 		if (kb.first != "P1" && kb.first != "P2") {
-			kb.second.
+			std::string temp = kb.first;
+			float minX = atoi(&temp[1]) * 100 + offset;
+			float maxX = minX + 60 - offset;
+			float minY = temp[0] == 'B' ? offset : 150 + offset;
+			float maxY = minY + 90 - offset;
+			pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ minX, maxX, minY, maxY })));
+
+			for (int index = 0; index < 4; ++index) {
+				float x = rand() % (int)(maxX - minX) + minX;
+				float y = rand() % (int)(maxY - minY) + minY;
+				if (index % 2) {
+					kb.second->addMarble(runApplication::marbleTexture1, sf::Vector2f(x, y));
+				}
+				else {
+					kb.second->addMarble(runApplication::marbleTexture0, sf::Vector2f(x, y));
+				}
+			}
+		}
+		else {
+			if (kb.first == "P1") {
+				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)offset, (float)(100 - offset), (float)offset, (float)(300 - offset) })));
+			}
+			else {
+				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)(700 + offset), (float)(800 - offset), (float)offset, (float)(300 - offset) })));
+			}
+
 		}
 	}
 
+	bool changePlayers = true;
 	sf::Event ev;
 	while (window.isOpen())
 	{
 		//Event polling
 		while (window.pollEvent(ev))
 		{
-			switch (ev.type)
-			{
+			switch (ev.type) {
 			case sf::Event::Closed:
 				window.close();
 				break;
+			case sf::Event::MouseButtonPressed:
+				std::cout << "click occurred" << std::endl;
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					std::cout << "left mouse button press occurred" << std::endl;
+					auto position = sf::Mouse::getPosition(window);
+					for (auto kb : gameBoard) {
+						if (kb.first != "P1" && kb.first != "P2") {
+							std::string temp = kb.first;
+							float minX = atoi(&temp[1]) * 100;
+							float maxX = minX + 100;
+							float minY = temp[0] == 'B' ? 0 : 150;
+							float maxY = minY + 150;
+							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY) {
+								std::pair<bool, std::pair<std::string,bool>> result = disperseBeads(temp);
+								if (result.first) {
+									changePlayers = false;
+									//if (result.second.second) {
+										//std::string pocket = pockets::getOppositeFromKey(result.second.first);
+									//}
+								}
+								break;
+							}
+						}
+					}
+				}
 			}
 		}
 		// Update
@@ -117,13 +172,15 @@ void runApplication::runApp() {
 
 		// Draw sprite
 		window.draw(boardSprite);
-		PocketShape newShape;
-		newShape.setSize(sf::Vector2f(100, 50));
-		for (auto marble : newShape.marbles) {
-			window.draw(*marble);
+		for (auto kb : gameBoard) {
+			if (kb.first != "P1" && kb.first != "P2") {
+				for (auto marble : kb.second->getMarble()) {
+					window.draw(*marble);
+				}
+			}
 		}
-		system("pause");
 		window.display(); // Tell app that window is done drawing
+		//system("pause");
 	}
 }
 
@@ -137,23 +194,20 @@ void runApplication::displayRules()
 
 }
 
-int runApplication::whoGoesFirst() // Function return a random integer (1 or 2) to determine which player goes first
+inline void runApplication::whoGoesFirst() // Function return a random integer (1 or 2) to determine which player goes first
 {
-	int player = 0;
-	player = rand() % 2 + 1;
-	
-	return player;
+	playerNumber = rand() % 2 + 1;
 }
 
-void runApplication::switchTurns(int& player) // Function rotates between players after each turn
+void runApplication::switchTurns(void) // Function rotates between players after each turn
 {
-	if (player == 1)
+	if (playerNumber == 1)
 	{
-		player = 2;
+		playerNumber = 2;
 	}
-	else if (player == 2)
+	else if (playerNumber == 2)
 	{
-		player = 1;
+		playerNumber = 1;
 	}
 
 	return;
@@ -164,9 +218,36 @@ void runApplication::selectPocket() // User selects a pocket to begin their turn
 
 }
 
-bool runApplication::disperseBeads() // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+std::pair<bool, std::pair<std::string, bool>> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 {
-	return true;
+	std::string temp = pocketName;
+	std::cout << pocketName << std::endl;
+	std::cout << gameBoard[pocketName]->getMarble().size() << std::endl;
+	for (auto target : gameBoard[pocketName]->getMarble()) {
+		// sound
+		pockets::nextPosition(temp, playerNumber);
+		float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
+		float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
+		float deltaX = x - target->getPosition().x;
+		float deltaY = y - target->getPosition().y;
+		target->move(sf::Vector2f(deltaX, deltaY));
+		gameBoard[temp]->addMarble(target);
+		//gameBoard[pocketName]->getMarble().remove(target);
+	}
+	gameBoard[pocketName]->getMarble().clear();
+	//if (determineCapture()) {
+	//	std::string opposite = pockets::getOppositeFromKey(temp);
+	//	for (auto marble : gameBoard[opposite]->getMarble()) {
+	//		float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
+	//		float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
+	//		float deltaX = x - marble->getPosition().x;
+	//		float deltaY = y - marble->getPosition().y;
+	//		marble->move(sf::Vector2f(deltaX, deltaY));
+	//		gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+	//		gameBoard[opposite]->getMarble().pop_front();
+	//	}
+	//}
+	return std::make_pair(false, std::make_pair("", false));
 }
 
 bool runApplication::determineCapture() // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
@@ -187,4 +268,9 @@ bool runApplication::endOfGame() // returns true if the game is over (i.e.one pl
 void runApplication::determineWinner() // Counts totals in the
 {
 
+}
+
+
+inline float runApplication::determineValidLocation(float min, float max) {
+	return rand() % (int)(max - min) + min;
 }

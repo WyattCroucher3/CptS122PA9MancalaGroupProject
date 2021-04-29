@@ -29,10 +29,15 @@ public:
     /// - Version: 1.0
 //    virtual void updateCount(const int & newCount) = 0;
     
-    void addMarble(void) {
-        shapeSprite.addMarble();
+    sf::Sprite& addMarble(sf::Texture& newTexture, const sf::Vector2f& newVector) {
+        return shapeSprite.addMarble(newTexture, newVector);
     }
-    
+    void addMarble(sf::Sprite*& sprite) {
+        return shapeSprite.addMarble(sprite);
+    }
+    std::list<sf::Sprite*> &getMarble(void) {
+        return this->shapeSprite.marbles;
+    }
     virtual unsigned int count() const = 0;
 };
 
