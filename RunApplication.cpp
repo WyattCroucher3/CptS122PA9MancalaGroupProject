@@ -4,6 +4,8 @@
 sf::Texture runApplication::boardTexture;
 sf::Texture runApplication::marbleTexture1;
 sf::Texture runApplication::marbleTexture0;
+sf::Font runApplication::pocketFont;
+sf::Font runApplication::statusFont;
 
 runApplication::runApplication()
 {
@@ -12,6 +14,8 @@ runApplication::runApplication()
 	runApplication::boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
 	runApplication::marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
 	runApplication::marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
+	runApplication::pocketFont.loadFromFile("game_over.ttf");
+	runApplication::statusFont.loadFromFile("bubbly.ttf");
 }
 
 //void runApplication::runApp() // This is where all the functions will be called for runApplication
@@ -80,11 +84,12 @@ runApplication::runApplication()
 void runApplication::runApp() {
 
 	// Initialize Window, Textures, and Sprites
-	sf::RenderWindow window(sf::VideoMode(800, 300), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(800, 350), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(5);
+	
+
 	// Who goes first
 	whoGoesFirst();
-
 	// create board sprite
 	sf::Sprite boardSprite;
 
@@ -168,19 +173,28 @@ void runApplication::runApp() {
 
 
 		// Render
-		window.clear(sf::Color(255, 255, 255, 255)); // Clear old frame
+		window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
 
-		// Draw sprite
+		// Draw sprite and pocket counts
 		window.draw(boardSprite);
 		for (auto kb : gameBoard) {
-			if (kb.first != "P1" && kb.first != "P2") {
-				for (auto marble : kb.second->getMarble()) {
-					window.draw(*marble);
-				}
+			auto marbles = kb.second->getMarble();
+			for (auto marble : marbles) {
+				window.draw(*marble);
 			}
+			
+			sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
+			temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
+			window.draw(temporaryText);
 		}
+
+		// Draw fonts
+		
+		//Player indicator
+		sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 20);
+		currentPlayerText.setPosition(0, 300);
+		window.draw(currentPlayerText);
 		window.display(); // Tell app that window is done drawing
-		//system("pause");
 	}
 }
 
@@ -220,12 +234,14 @@ void runApplication::selectPocket() // User selects a pocket to begin their turn
 
 std::pair<bool, std::pair<std::string, bool>> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 {
+	std::cout << "Player Number: " << this->playerNumber << std::endl;
 	std::string temp = pocketName;
-	std::cout << pocketName << std::endl;
-	std::cout << gameBoard[pocketName]->getMarble().size() << std::endl;
+	std::cout << "PocketName: " << pocketName << std::endl;
+	std::cout << "Size: " << gameBoard[pocketName]->getMarble().size() << std::endl;
 	for (auto target : gameBoard[pocketName]->getMarble()) {
 		// sound
 		pockets::nextPosition(temp, playerNumber);
+		std::cout << "Next Position: " << temp << std::endl;
 		float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
 		float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
 		float deltaX = x - target->getPosition().x;
