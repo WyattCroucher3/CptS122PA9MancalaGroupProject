@@ -70,9 +70,8 @@ public:
     /// - Returns:  a boolean that determines if the hole passed via key is owned by this player
     /// - Version: 1.0
     inline bool ownsPocket(const string & key) const {
-        cout << "Use of " << __FUNCTION__ << " is deprecated!" << endl;
         ABORT_IF_KEY_NOT_2
-        return (owner == 1 && key[1]== '1') || (owner == 2 && key[1] == '2');
+        return (owner == 1 && key[0]== 'A') ^ (owner == 2 && key[0] == 'B');
     }
     
     unsigned int count() const {
@@ -192,3 +191,16 @@ inline string getOppositeFromKey(const string & key) noexcept {
 
 }
 
+/*
+ 
+ #if defined(WINDOWS)
+ runApplication::boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
+ runApplication::marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
+ runApplication::marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
+ #else
+ runApplication::boardTexture.loadFromFile("Images/gameAssets/mancalaBoard.png");
+ runApplication::marbleTexture0.loadFromFile("Images/gameAssets/marble0.png");
+ runApplication::marbleTexture1.loadFromFile("Images/gameAssets/marble1.png");
+ #endif
+ 
+ */
