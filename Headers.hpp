@@ -13,7 +13,7 @@
 #include "standard.hpp"
 #include "Error.hpp"
 #include "MusicPlayer.hpp"
-#include "pockets.hpp"
 #include "pocketShape.hpp"
+#include "pockets.hpp"
 
 #endif /* Headers_hpp */

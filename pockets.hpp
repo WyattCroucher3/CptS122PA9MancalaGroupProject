@@ -18,7 +18,7 @@ protected:
     PocketShape shapeSprite;
     
     Pocket(string & setID) {
-        shapeSprite.setID(setID);
+        //shapeSprite.setID(setID);
     }
 public:
     /// Update the count and image reflecting the new value.

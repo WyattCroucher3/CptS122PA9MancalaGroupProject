@@ -79,12 +79,22 @@ void runApplication::runApp() {
 	// Textures
 	sf::Texture boardTexture;
 	boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
+	sf::Texture marbleTexture0;
+	marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
+	sf::Texture marbleTexture1;
+	marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
 
-	// create sprites
+	// create board sprite
 	sf::Sprite boardSprite;
 
-	// set Textures for sprites
+	// set Textures for board
 	boardSprite.setTexture(boardTexture);
+
+	for (auto kb : gameBoard) {
+		if (kb.first != "P1" && kb.first != "P2") {
+			kb.second.
+		}
+	}
 
 	sf::Event ev;
 	while (window.isOpen())
@@ -105,19 +115,21 @@ void runApplication::runApp() {
 		// Render
 		window.clear(sf::Color(255, 255, 255, 255)); // Clear old frame
 
-		sf::RectangleShape test;
-		PocketShape newPocket;
-
 		// Draw sprite
 		window.draw(boardSprite);
-
+		PocketShape newShape;
+		newShape.setSize(sf::Vector2f(100, 50));
+		for (auto marble : newShape.marbles) {
+			window.draw(*marble);
+		}
+		system("pause");
 		window.display(); // Tell app that window is done drawing
 	}
 }
 
 int runApplication::mainMenu()
 {
-
+	return 0;
 }
 
 void runApplication::displayRules()
@@ -154,22 +166,22 @@ void runApplication::selectPocket() // User selects a pocket to begin their turn
 
 bool runApplication::disperseBeads() // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 {
-
+	return true;
 }
 
 bool runApplication::determineCapture() // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
 {
-
+	return true;
 }
 
 void runApplication::captureAndScore() // Performs the capture action
 {
-
+	
 }
 
 bool runApplication::endOfGame() // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
 {
-
+	return true;
 }
 
 void runApplication::determineWinner() // Counts totals in the
