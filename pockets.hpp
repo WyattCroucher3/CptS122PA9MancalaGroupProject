@@ -15,12 +15,10 @@ namespace pockets {
 
 class Pocket {
 protected:
-    string ID;
     PocketShape shapeSprite;
     
-    Pocket(string & setID, const unsigned int & setCount) {
-        this->ID = setID;
-        this->_count = setCount;
+    Pocket(string & setID) {
+        shapeSprite.setID(setID);
     }
 public:
     /// Update the count and image reflecting the new value.
@@ -29,10 +27,10 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-    virtual void updateCount(const int & newCount) = 0;
+//    virtual void updateCount(const int & newCount) = 0;
     
     unsigned int count() const {
-        return this->_count;
+        return (unsigned int)this->shapeSprite.marbles.size();
     }
 };
 
@@ -40,8 +38,7 @@ class MancalaPocket final : public Pocket {
     unsigned int owner;
 public:
     MancalaPocket(string & setID,
-                  unsigned int & player,
-                  const unsigned int & setCount = 4) : Pocket(setID, setCount) {
+                  unsigned int & player) : Pocket(setID) {
         this->owner = player;
 //        this->updateCount((int)setCount);
     }
@@ -52,12 +49,12 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-    void updateCount(const int & newCount) override {
-        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-        thread.launch(); // will run asynchronously
-        
-        this->_count = (unsigned int)newCount;
-    }
+//    void updateCount(const int & newCount) override {
+//        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
+//        thread.launch(); // will run asynchronously
+//
+//        this->_count = (unsigned int)newCount;
+//    }
     
     /// get wether or not the pocket is owned by this player by passing in a key.
     ///
@@ -76,7 +73,7 @@ typedef unordered_map<string, Pocket*> pocketMap;
 
 class BoardPocket final : public Pocket {
 public:
-    BoardPocket(string & setID, const unsigned int & setCount = 4) : Pocket (setID, setCount) {
+    BoardPocket(string & setID) : Pocket (setID) {
 //        this->updateCount((int)setCount);
     }
     
@@ -86,12 +83,12 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-    void updateCount(const int & newCount) override {
-        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-        thread.launch(); // will run asynchronously
-        
-        this->_count = (unsigned int)newCount;
-    }
+//    void updateCount(const int & newCount) override {
+//        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
+//        thread.launch(); // will run asynchronously
+//
+//        this->_count = (unsigned int)newCount;
+//    }
 };
 
 /// Sets up the pockets, adding 6 BoardPockets on each side with 2 MancalaPockets on player sides.
