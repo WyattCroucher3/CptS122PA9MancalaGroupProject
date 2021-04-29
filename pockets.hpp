@@ -63,17 +63,6 @@ public:
 //        this->_count = (unsigned int)newCount;
 //    }
     
-    /// get wether or not the pocket is owned by this player by passing in a key.
-    ///
-    /// - Postcondition: boolean indicating owernship is returned
-    /// - Parameter key:  the key to test against.
-    /// - Returns:  a boolean that determines if the hole passed via key is owned by this player
-    /// - Version: 1.0
-    inline bool ownsPocket(const string & key) const {
-        ABORT_IF_KEY_NOT_2
-        return (owner == 1 && key[0]== 'A') ^ (owner == 2 && key[0] == 'B');
-    }
-    
     unsigned int count() const {
         return (unsigned int)this->shapeSprite.marbles.size();
     }
@@ -189,18 +178,15 @@ inline string getOppositeFromKey(const string & key) noexcept {
     return rtnKey;
 }
 
+/// get wether or not the pocket is owned by this player by passing in a key.
+///
+/// - Postcondition: boolean indicating owernship is returned
+/// - Parameter key:  the key to test against.
+/// - Returns:  a boolean that determines if the hole passed via key is owned by this player
+/// - Version: 1.0
+inline bool ownsPocket(const string & key, unsigned int & owner) {
+    ABORT_IF_KEY_NOT_2
+    return (owner == 1 && key[0]== 'A') ^ (owner == 2 && key[0] == 'B');
 }
 
-/*
- 
- #if defined(WINDOWS)
- runApplication::boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
- runApplication::marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
- runApplication::marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
- #else
- runApplication::boardTexture.loadFromFile("Images/gameAssets/mancalaBoard.png");
- runApplication::marbleTexture0.loadFromFile("Images/gameAssets/marble0.png");
- runApplication::marbleTexture1.loadFromFile("Images/gameAssets/marble1.png");
- #endif
- 
- */
+}
