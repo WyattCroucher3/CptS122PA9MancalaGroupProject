@@ -29,9 +29,11 @@ public:
     /// - Version: 1.0
 //    virtual void updateCount(const int & newCount) = 0;
     
-    unsigned int count() const {
-        return (unsigned int)this->shapeSprite.marbles.size();
+    void addMarble(void) {
+        shapeSprite.addMarble();
     }
+    
+    virtual unsigned int count() const = 0;
 };
 
 class MancalaPocket final : public Pocket {
@@ -67,6 +69,10 @@ public:
         ABORT_IF_KEY_NOT_2
         return (owner == 1 && key[1]== '1') || (owner == 2 && key[1] == '2');
     }
+    
+    unsigned int count() const {
+        return (unsigned int)this->shapeSprite.marbles.size();
+    }
 };
 
 typedef unordered_map<string, Pocket*> pocketMap;
@@ -75,6 +81,10 @@ class BoardPocket final : public Pocket {
 public:
     BoardPocket(string & setID) : Pocket (setID) {
 //        this->updateCount((int)setCount);
+    }
+    
+    unsigned int count() const {
+        return (unsigned int)this->shapeSprite.marbles.size();
     }
     
     /// Update the count and image reflecting the new value.
