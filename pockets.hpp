@@ -27,7 +27,7 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-//    virtual void updateCount(const int & newCount) = 0;
+    //    virtual void updateCount(const int & newCount) = 0;
     
     sf::Sprite& addMarble(sf::Texture& newTexture, const sf::Vector2f& newVector) {
         return shapeSprite.addMarble(newTexture, newVector);
@@ -38,7 +38,7 @@ public:
     std::list<sf::Sprite*> &getMarble(void) {
         return this->shapeSprite.marbles;
     }
-    virtual unsigned int count() const = 0;
+    virtual unsigned long count() const = 0;
 };
 
 class MancalaPocket final : public Pocket {
@@ -47,7 +47,7 @@ public:
     MancalaPocket(string & setID,
                   unsigned int & player) : Pocket(setID) {
         this->owner = player;
-//        this->updateCount((int)setCount);
+        //        this->updateCount((int)setCount);
     }
     
     /// Update the count and image reflecting the new value.
@@ -56,15 +56,15 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-//    void updateCount(const int & newCount) override {
-//        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-//        thread.launch(); // will run asynchronously
-//
-//        this->_count = (unsigned int)newCount;
-//    }
+    //    void updateCount(const int & newCount) override {
+    //        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
+    //        thread.launch(); // will run asynchronously
+    //
+    //        this->_count = (unsigned int)newCount;
+    //    }
     
-    unsigned int count() const {
-        return (unsigned int)this->shapeSprite.marbles.size();
+    unsigned long count() const {
+        return this->shapeSprite.marbles.size();
     }
 };
 
@@ -73,11 +73,11 @@ typedef unordered_map<string, Pocket*> pocketMap;
 class BoardPocket final : public Pocket {
 public:
     BoardPocket(string & setID) : Pocket (setID) {
-//        this->updateCount((int)setCount);
+        //        this->updateCount((int)setCount);
     }
     
-    unsigned int count() const {
-        return (unsigned int)this->shapeSprite.marbles.size();
+    unsigned long count() const {
+        return this->shapeSprite.marbles.size();
     }
     
     /// Update the count and image reflecting the new value.
@@ -86,12 +86,12 @@ public:
     /// - Postcondition: the value is updated along with image. audio is played at this point.
     /// - Parameter newCount:  the new count to handle
     /// - Version: 1.0
-//    void updateCount(const int & newCount) override {
-//        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-//        thread.launch(); // will run asynchronously
-//
-//        this->_count = (unsigned int)newCount;
-//    }
+    //    void updateCount(const int & newCount) override {
+    //        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
+    //        thread.launch(); // will run asynchronously
+    //
+    //        this->_count = (unsigned int)newCount;
+    //    }
 };
 
 /// Sets up the pockets, adding 6 BoardPockets on each side with 2 MancalaPockets on player sides.
@@ -158,24 +158,10 @@ inline void nextPosition(string & key, const unsigned int & playerID) noexcept {
 inline string getOppositeFromKey(const string & key) noexcept {
     ABORT_IF_KEY_NOT_2
     
-    int keyi = atoi(&key[1]);
+    string key1 = {'B',key[1]}, key2 = {'A',key[1]};
     
-    if (key[0] == 'B') {
-        keyi += 10;
-    } else if (key[0] == 'A');/* VERIFY KEY IS VALID */
-      else {
-        return "";
-    }
+    return key[0] == 'A' ? key1 : key2;
     
-    keyi = (keyi < 10 ? 11 : 1) + 6 - (keyi % 10);
-    
-    string rtnKey = "";
-    
-    rtnKey += keyi < 10 ? 'A' : 'B';
-    
-    rtnKey += std::to_string(keyi % 10);
-    
-    return rtnKey;
 }
 
 /// get wether or not the pocket is owned by this player by passing in a key.
