@@ -14,6 +14,6 @@
 #include "Error.hpp"
 #include "MusicPlayer.hpp"
 #include "pockets.hpp"
-//#include "GameBoard.hpp" // Will remove in future build
+#include "pocketShape.hpp"
 
 #endif /* Headers_hpp */

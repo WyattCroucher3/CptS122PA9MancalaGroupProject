@@ -16,8 +16,7 @@ namespace pockets {
 class Pocket {
 protected:
     string ID;
-    unsigned int _count;
-    sf::Image image;
+    PocketShape shapeSprite;
     
     Pocket(string & setID, const unsigned int & setCount) {
         this->ID = setID;
