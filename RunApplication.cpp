@@ -6,32 +6,6 @@ runApplication::runApplication()
 {
 	pockets::setupMap(this->gameBoard);
 	srand((unsigned int)time(NULL));
-
-	// Initialize Window, Textures, and Sprites
-	sf::RenderWindow window(sf::VideoMode(800, 300), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
-
-	// Textures
-	sf::Texture boardTexture;
-	boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
-
-	sf::Texture marbleTexture0;
-	marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
-
-	sf::Texture marbleTexture1;
-	marbleTexture0.loadFromFile("Images\\gameAssets\\marble1.png");
-
-	// create sprites
-	sf::Sprite boardSprite;
-	sf::Sprite marbleSprite0[24];
-	sf::Sprite marbleSprite1[24];
-
-	// set Textures for sprites
-	boardSprite.setTexture(boardTexture);
-
-	for (int index = 0; index < 24; ++index) {
-		marbleSprite0[index].setTexture(marbleTexture0);
-		marbleSprite1[index].setTexture(marbleTexture1);
-	}
 }
 
 //void runApplication::runApp() // This is where all the functions will be called for runApplication
@@ -98,7 +72,47 @@ runApplication::runApplication()
 //}
 
 void runApplication::runApp() {
-	while 
+
+	// Initialize Window, Textures, and Sprites
+	sf::RenderWindow window(sf::VideoMode(800, 300), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
+
+	// Textures
+	sf::Texture boardTexture;
+	boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
+
+	// create sprites
+	sf::Sprite boardSprite;
+
+	// set Textures for sprites
+	boardSprite.setTexture(boardTexture);
+
+	sf::Event ev;
+	while (window.isOpen())
+	{
+		//Event polling
+		while (window.pollEvent(ev))
+		{
+			switch (ev.type)
+			{
+			case sf::Event::Closed:
+				window.close();
+				break;
+			}
+		}
+		// Update
+
+
+		// Render
+		window.clear(sf::Color(255, 255, 255, 255)); // Clear old frame
+
+		sf::RectangleShape test;
+		PocketShape newPocket;
+
+		// Draw sprite
+		window.draw(boardSprite);
+
+		window.display(); // Tell app that window is done drawing
+	}
 }
 
 int runApplication::mainMenu()
