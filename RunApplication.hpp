@@ -28,8 +28,25 @@ private:
 	static sf::Texture boardTexture;
 	static sf::Texture marbleTexture1;
 	static sf::Texture marbleTexture0;
+	static sf::Font pocketFont;
+	static sf::Font statusFont;
 	pockets::pocketMap gameBoard;
 	std::unordered_map<std::string, std::vector<float>> pocketPositions;
+	const std::unordered_map<std::string, std::pair<float, float>> pocketFontLocations =
+		{ {"P1", std::make_pair(45,240) },
+		{"A1", std::make_pair(145,240) },
+		{"A2", std::make_pair(245,240) },
+		{"A3", std::make_pair(345,240) },
+		{"A4", std::make_pair(445,240) },
+		{"A5", std::make_pair(545,240) },
+		{"A6", std::make_pair(645,240) },
+		{"P2", std::make_pair(745,240) },
+		{"B1", std::make_pair(145,90) },
+		{"B2", std::make_pair(245,90) },
+		{"B3", std::make_pair(345,90) },
+		{"B4", std::make_pair(445,90) },
+		{"B5", std::make_pair(545,90) },
+		{"B6", std::make_pair(645,90) } };
 };
 
 
