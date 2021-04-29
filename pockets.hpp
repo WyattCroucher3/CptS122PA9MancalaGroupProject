@@ -173,7 +173,7 @@ inline string getOppositeFromKey(const string & key) noexcept {
     
     rtnKey += keyi < 10 ? 'A' : 'B';
     
-    rtnKey += keyi % 10;
+    rtnKey += std::to_string(keyi % 10);
     
     return rtnKey;
 }
@@ -184,9 +184,9 @@ inline string getOppositeFromKey(const string & key) noexcept {
 /// - Parameter key:  the key to test against.
 /// - Returns:  a boolean that determines if the hole passed via key is owned by this player
 /// - Version: 1.0
-inline bool ownsPocket(const string & key, unsigned int & owner) {
+inline bool ownsPocket(const string & key, int & owner) {
     ABORT_IF_KEY_NOT_2
-    return (owner == 1 && key[0]== 'A') ^ (owner == 2 && key[0] == 'B');
+    return (owner == 1 && key[0]== 'B') || (owner == 2 && key[0] == 'A');
 }
 
 }

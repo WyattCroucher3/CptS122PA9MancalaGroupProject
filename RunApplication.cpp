@@ -154,7 +154,7 @@ void runApplication::runApp() {
 							float maxX = minX + 100;
 							float minY = temp[0] == 'B' ? 0 : 150;
 							float maxY = minY + 150;
-							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY) {
+							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber)) {
 								std::pair<bool, std::pair<std::string,bool>> result = disperseBeads(temp);
 								if (result.first) {
 									changePlayers = false;
@@ -248,27 +248,43 @@ std::pair<bool, std::pair<std::string, bool>> runApplication::disperseBeads(cons
 		float deltaY = y - target->getPosition().y;
 		target->move(sf::Vector2f(deltaX, deltaY));
 		gameBoard[temp]->addMarble(target);
-		//gameBoard[pocketName]->getMarble().remove(target);
 	}
 	gameBoard[pocketName]->getMarble().clear();
-	//if (determineCapture()) {
-	//	std::string opposite = pockets::getOppositeFromKey(temp);
-	//	for (auto marble : gameBoard[opposite]->getMarble()) {
-	//		float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
-	//		float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
-	//		float deltaX = x - marble->getPosition().x;
-	//		float deltaY = y - marble->getPosition().y;
-	//		marble->move(sf::Vector2f(deltaX, deltaY));
-	//		gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
-	//		gameBoard[opposite]->getMarble().pop_front();
-	//	}
-	//}
+	if (determineCapture(temp)) {
+		std::string opposite = pockets::getOppositeFromKey(temp);
+		for (auto marble : gameBoard[opposite]->getMarble()) {
+			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
+			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
+			float deltaX = x - marble->getPosition().x;
+			float deltaY = y - marble->getPosition().y;
+			marble->move(sf::Vector2f(deltaX, deltaY));
+			gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+		}
+		for (auto marble : gameBoard[temp]->getMarble()) {
+			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
+			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
+			float deltaX = x - marble->getPosition().x;
+			float deltaY = y - marble->getPosition().y;
+			marble->move(sf::Vector2f(deltaX, deltaY));
+			gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+		}
+		gameBoard[temp]->getMarble().clear();
+		gameBoard[opposite]->getMarble().clear();
+	}
 	return std::make_pair(false, std::make_pair("", false));
 }
 
-bool runApplication::determineCapture() // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
+bool runApplication::determineCapture(const std::string &pocketName) // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
 {
-	return true;
+	if (pockets::ownsPocket(pocketName, this->playerNumber)) {
+		std::cout << pockets::getOppositeFromKey(pocketName) << std::endl;
+		if (gameBoard[pocketName]->getMarble().size() == 1) {
+			if (gameBoard[pockets::getOppositeFromKey(pocketName)]->getMarble().size() > 0) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void runApplication::captureAndScore() // Performs the capture action
