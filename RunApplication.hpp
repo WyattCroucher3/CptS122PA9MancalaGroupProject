@@ -10,7 +10,7 @@ public:
 	void runApp();
 
 	int mainMenu();
-	void displayRules();
+	void displayRules(sf::RectangleShape & rect, sf::Text & text);
 	inline void whoGoesFirst(); // Function return a random integer (1 or 2) to determine which player goes first
 	void switchTurns(void);
 

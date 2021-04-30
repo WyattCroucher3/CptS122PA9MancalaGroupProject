@@ -11,6 +11,7 @@
 
 // include custom headers
 #include "standard.hpp"
+#include "wraptext.hpp"
 #include "Error.hpp"
 #include "MusicPlayer.hpp"
 #include "pocketShape.hpp"
