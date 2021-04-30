@@ -15,9 +15,9 @@ public:
 	void switchTurns(void);
 
 	void selectPocket(); // User selects a pocket to begin their turn; function validates the choice as a valid option
-	bool disperseBeads(const std::string pocketName); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+	std::pair<bool,bool> disperseBeads(const std::string pocketName); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 	bool determineCapture(const std::string& pocketName); // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
-	void endOfGame(std::string emptyThisSide, sf::RenderWindow& mainWindow); // accepts a string with a side to empty when the game is over
+	int endOfGame(std::string emptyThisSide); // accepts a string with a side to empty when the game is over
 
 	void determineWinner(); // Counts totals in the 
 	inline float determineValidLocation(float min, float max);

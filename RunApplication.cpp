@@ -30,11 +30,18 @@ runApplication::runApplication()
 }
 
 void runApplication::runApp() {
-
 	// Initialize Window, Textures, and Sprites
 	sf::RenderWindow window(sf::VideoMode(800, 350), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(5);
-	
+
+	//Variables
+	std::string statusText;
+	int winner = -1;
+
+	// Rules initialization
+	bool showingRules = false;
+	sf::RectangleShape rulesShape;
+	sf::Text rulesText;
 
 	// Who goes first
 	whoGoesFirst();
@@ -85,9 +92,6 @@ void runApplication::runApp() {
 	sf::Event ev;
 	while (window.isOpen())
 	{
-        bool showingRules = false;
-        sf::RectangleShape rulesShape;
-        sf::Text rulesText;
 		//Event polling
 		while (window.pollEvent(ev))
 		{
@@ -95,113 +99,185 @@ void runApplication::runApp() {
 			case sf::Event::Closed:
 				window.close();
 				break;
-            case sf::Event::KeyReleased:
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-                    showingRules = false;
-                }
-                break;
-            case sf::Event::MouseButtonPressed:
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    auto position = sf::Mouse::getPosition(window);
-                    
-                    if (position.x >= 750 && position.y >= 300) {
-                        if (showingRules) { break; }
-                        this->displayRules(rulesShape, rulesText);
-                        showingRules = true;
-                        break;
-                    } else if (position.y > 300) { break; }
-                    
-                    for (auto kb : gameBoard) {
-                        if (kb.first != "P1" && kb.first != "P2") {
-                            std::string temp = kb.first;
-                            float minX = atoi(&temp[1]) * 100;
-                            float maxX = minX + 100;
-                            float minY = temp[0] == 'B' ? 0 : 150;
-                            float maxY = minY + 150;
-                            if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber) && gameBoard[temp]->getMarble().size() > 0) {
-                                if (!disperseBeads(temp)) {
-                                    switchTurns();
-                                }
-                                bool sideOneEmpty = false,
-                                sideTwoEmpty = false;
-                                int marbleCountA = 0,
-                                marbleCountB = 0;
-                                for (auto pocketName : gameBoard) {
-                                    if (pocketName.first.at(0) == 'A') {
-                                        for (auto marble : pocketName.second->getMarble()) {
-                                            ++marbleCountA;
-                                        }
+			case sf::Event::KeyPressed:
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && showingRules == true) {
+					showingRules = false;
+				}
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					auto position = sf::Mouse::getPosition(window);
 
-                                    }
-                                    if (pocketName.first.at(0) == 'B') {
-                                        for (auto marble : pocketName.second->getMarble()) {
-                                            ++marbleCountB;
-                                        }
-                                    }
-                                }
-                                if (marbleCountA == 0) {
-                                    sideOneEmpty = true;
-                                }
-                                else if (marbleCountB == 0) {
-                                    sideTwoEmpty = true;
-                                }
-                                if (sideOneEmpty || sideTwoEmpty) {
-                                    endOfGame(sideOneEmpty ? "B" : "A", window);
-                                }
-                            }
-                        }
-                    }
-                }
-            default: break;
-            }
+					if (position.x >= 750 && position.y >= 300) {
+						if (showingRules) { break; }
+						this->displayRules(rulesShape, rulesText);
+						showingRules = true;
+						break;
+					}
+					else if (position.y > 300) { break; }
+
+					for (auto kb : gameBoard) {
+						if (kb.first != "P1" && kb.first != "P2") {
+							std::string temp = kb.first;
+							float minX = atoi(&temp[1]) * 100;
+							float maxX = minX + 100;
+							float minY = temp[0] == 'B' ? 0 : 150;
+							float maxY = minY + 150;
+							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber) && gameBoard[temp]->getMarble().size() > 0) {
+								std::pair<bool, bool> result = disperseBeads(temp);
+								if (!result.first) {
+									switchTurns();
+									statusText = "";
+								}
+								
+								else {
+									statusText = "Play again!";
+								}
+
+							    if (result.second) {
+									if (this->playerNumber == 1) {
+										statusText = "Player 2 Capture!";
+									}
+									else {
+										statusText = "Player 1 Capture!";
+									}
+								}
+
+								bool sideOneEmpty = false,
+									sideTwoEmpty = false;
+								int marbleCountA = 0,
+									marbleCountB = 0;
+								for (auto pocketName : gameBoard) {
+									if (pocketName.first.at(0) == 'A') {
+										for (auto marble : pocketName.second->getMarble()) {
+											++marbleCountA;
+										}
+
+									}
+									if (pocketName.first.at(0) == 'B') {
+										for (auto marble : pocketName.second->getMarble()) {
+											++marbleCountB;
+										}
+									}
+								}
+								if (marbleCountA == 0) {
+									sideOneEmpty = true;
+								}
+								else if (marbleCountB == 0) {
+									sideTwoEmpty = true;
+								}
+								if (sideOneEmpty || sideTwoEmpty) {
+									winner = endOfGame(sideOneEmpty ? "B" : "A");
+								}
+							}
+						}
+					}
+				}
+			default: break;
+			}
 		}
 		// Update
 
-
-		// Render
-		window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
-        
-        // show rules and stop if needed.
-        if (showingRules) {
-            window.draw(rulesShape);
-            window.draw(rulesText);
-            window.display();
-            system("read -r");
-            continue;
-        }
-
-		// Draw sprite and pocket counts
-		window.draw(boardSprite);
-		buttonSprite.setPosition(0, 300);
-		window.draw(buttonSprite);
-		for (auto kb : gameBoard) {
-			auto marbles = kb.second->getMarble();
-			for (auto marble : marbles) {
-				window.draw(*marble);
-			}
-			
-			sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
-			temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
-			window.draw(temporaryText);
+		// show rules and stop if needed.
+		if (showingRules) {
+			window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
+			window.draw(rulesShape);
+			window.draw(rulesText);
+			window.display();
 		}
+		else if (winner >= 0) {
+			// clear window
+			window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
+			// Draw sprite and pocket counts
+			window.draw(boardSprite);
+			buttonSprite.setPosition(0, 300);
+			window.draw(buttonSprite);
+			for (auto kb : gameBoard) {
+				auto marbles = kb.second->getMarble();
+				for (auto marble : marbles) {
+					window.draw(*marble);
+				}
 
-		// Draw fonts
-		
-		//Player indicator
-		sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
-		currentPlayerText.setPosition(60, 317);
-        
-        sf::Text rulesIcon("?", this->statusFont, 15);
-        rulesIcon.setPosition(766,317);
-        
-        sf::Text statusBar("Play Again", this->statusFont, 15);
-        statusBar.setPosition(500, 317);
-        
-		window.draw(currentPlayerText);
-        window.draw(rulesIcon);
-        window.draw(statusBar);
-        
-		window.display(); // Tell app that window is done drawing
+				sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
+				temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
+				window.draw(temporaryText);
+			}
+
+			// Draw fonts
+
+			//Player indicator
+			sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
+			currentPlayerText.setPosition(60, 317);
+
+			sf::Text rulesIcon("?", this->statusFont, 15);
+			rulesIcon.setPosition(766, 317);
+			sf::Text statusBar(statusText, this->statusFont, 15);
+			statusBar.setPosition(430, 317);
+
+			window.draw(currentPlayerText);
+			window.draw(rulesIcon);
+			window.draw(statusBar);
+
+			switch (winner) {
+				case 1: {
+					sf::Text winnerText("Player 1 wins!", this->statusFont, 40);
+					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((140 - winnerText.getGlobalBounds().height) / 2));
+					window.draw(winnerText);
+					window.display(); // Tell app that window is done drawing
+					break;
+				}
+				case 2: {
+					sf::Text winnerText("Player 2 wins!", this->statusFont, 40);
+					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((430 - winnerText.getGlobalBounds().height) / 2));
+					window.draw(winnerText);
+					window.display(); // Tell app that window is done drawing
+					break;
+				}
+				case 0: {
+					sf::Text winnerText("It's a tie!!", this->statusFont, 40);
+					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((320 - winnerText.getGlobalBounds().height) / 2));
+					window.draw(winnerText);
+					window.display(); // Tell app that window is done drawing
+					break;
+				}
+			}
+		}
+		else {
+			// clear window
+			window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
+			// Draw sprite and pocket counts
+			window.draw(boardSprite);
+			buttonSprite.setPosition(0, 300);
+			window.draw(buttonSprite);
+			for (auto kb : gameBoard) {
+				auto marbles = kb.second->getMarble();
+				for (auto marble : marbles) {
+					window.draw(*marble);
+				}
+
+				sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
+				temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
+				window.draw(temporaryText);
+			}
+
+			// Draw fonts
+
+			//Player indicator
+			sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
+			currentPlayerText.setPosition(60, 317);
+
+			sf::Text rulesIcon("?", this->statusFont, 15);
+			rulesIcon.setPosition(766, 317);
+			sf::Text statusBar(statusText, this->statusFont, 15);
+			statusBar.setPosition(430, 317);
+
+			window.draw(currentPlayerText);
+			window.draw(rulesIcon);
+			window.draw(statusBar);
+
+			window.display(); // Tell app that window is done drawing
+			winner = endOfGame("B");
+		}
 	}
 }
 
@@ -217,7 +293,7 @@ void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
     // "Welcome to the ancient strategy game of Mancala!\n\nThe rules of this game are simple: players will take turns selecting pockets from their\nside of the board, and after a choice\nis made, the marbles from that pocket are dropped in pockets rotating counterclockwise\naround the board. Players score points\nby dropping marbles in their scoring pocket (the larger pocket to the right of the players board pockets) as they move around the board. Players only\ndrop marbles in their own scoring pocket, and skip their opponents scoring pocket if they make it around the entire board.\n\nThere are just a few other rules to keep in mind: if you pick a pocket that has the perfect number of marbles to land in your scoring pocket, you get to\ngo again! Also, if you select a pocket in which your last marble lands in an empty pocket on your side of the board, and the opposing pocket on your\nopponent’s side has one or more marbles in it, then you get to “capture” your opponent’s marbles (and your single marble) and add them to your scoring\npocket!\n\nThe game ends once one player clears all the marbles on their side of the board. All remaining marbles on the opponent’s side of the board\nare then added to the opponents scoring pocket. The player with the most marbles in their scoring pocket at the end of the game wins!"
     
     
-    sf::Text _text(wrapText("Welcome to the ancient strategy game of Mancala!\n\nThe rules of this game are simple: players will take turns selecting pockets from their side of the board, and after a choice is made, the marbles from that pocket are dropped in pockets rotating counterclockwise around the board. Players score points by dropping marbles in their scoring pocket (the larger pocket to the right of the players board pockets) as they move around the board. Players only drop marbles in their own scoring pocket, and skip their opponents scoring pocket if they make it around the entire board.\n\nThere are just a few other rules to keep in mind: if you pick a pocket that has the perfect number of marbles to land in your scoring pocket, you get to go again! Also, if you select a pocket in which your last marble lands in an empty pocket on your side of the board, and the opposing pocket on your opponent’s side has one or more marbles in it, then you get to “capture” your opponent’s marbles (and your single marble) and add them to your scoring pocket!\n\nThe game ends once one player clears all the marbles on their side of the board. All remaining marbles on the opponent’s side of the board are then added to the opponents scoring pocket. The player with the most marbles in their scoring pocket at the end of the game wins!\n\n[Press return to continue...]", 800, this->statusFont, 12), this->statusFont, 12);
+    sf::Text _text(wrapText("Welcome to the ancient strategy game of Mancala!\n\nThe rules of this game are simple: players will take turns selecting pockets from their side of the board, and after a choice is made, the marbles from that pocket are dropped in pockets rotating counterclockwise around the board. Players score points by dropping marbles in their scoring pocket (the larger pocket to the right of the players board pockets) as they move around the board. Players only drop marbles in their own scoring pocket, and skip their opponents scoring pocket if they make it around the entire board.\n\nThere are just a few other rules to keep in mind: if you pick a pocket that has the perfect number of marbles to land in your scoring pocket, you get to go again! Also, if you select a pocket in which your last marble lands in an empty pocket on your side of the board, and the opposing pocket on your opponent's side has one or more marbles in it, then you get to \"capture\" your opponent's marbles (and your single marble) and add them to your scoring pocket!\n\nThe game ends once one player clears all the marbles on their side of the board. All remaining marbles on the opponent's side of the board are then added to the opponent's scoring pocket. The player with the most marbles in their scoring pocket at the end of the game wins!\n\n[Press return to continue...]", 800, this->statusFont, 12), this->statusFont, 12);
     
     _text.setPosition(0, 0);
     _text.setFillColor(sf::Color::White);
@@ -250,9 +326,10 @@ void runApplication::selectPocket() // User selects a pocket to begin their turn
 
 }
 
-bool runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+std::pair<bool,bool> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 {
 	std::string temp = pocketName;
+	bool capture = false;
 	for (auto target : gameBoard[pocketName]->getMarble()) {
 		// sound
 		pockets::nextPosition(temp, playerNumber);
@@ -265,6 +342,7 @@ bool runApplication::disperseBeads(const std::string pocketName) // Beads from c
 	}
 	gameBoard[pocketName]->getMarble().clear();
 	if (determineCapture(temp)) {
+		capture = true;
 		std::string opposite = pockets::getOppositeFromKey(temp);
 		for (auto marble : gameBoard[opposite]->getMarble()) {
 			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
@@ -285,13 +363,12 @@ bool runApplication::disperseBeads(const std::string pocketName) // Beads from c
 		gameBoard[temp]->getMarble().clear();
 		gameBoard[opposite]->getMarble().clear();
 	}
-	return temp == (playerNumber == 1 ? "P1" : (playerNumber == 2 ? "P2" : "")); // if playerNumber == 1, then P1, else check if playerNumber == 2, then P2 else return false
+	return std::make_pair(temp == (playerNumber == 1 ? "P1" : (playerNumber == 2 ? "P2" : "")), capture); // if playerNumber == 1, then P1, else check if playerNumber == 2, then P2 else return false
 }
 
 bool runApplication::determineCapture(const std::string &pocketName) // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
 {
 	if (pockets::ownsPocket(pocketName, this->playerNumber)) {
-		std::cout << pockets::getOppositeFromKey(pocketName) << std::endl;
 		if (gameBoard[pocketName]->getMarble().size() == 1) {
 			if (gameBoard[pockets::getOppositeFromKey(pocketName)]->getMarble().size() > 0) {
 				return true;
@@ -301,7 +378,7 @@ bool runApplication::determineCapture(const std::string &pocketName) // Checks t
 	return false;
 }
 
-void runApplication::endOfGame(std::string emptyThisSide, sf::RenderWindow& mainWindow) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
+int runApplication::endOfGame(std::string emptyThisSide) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
 {
 	int marbleCountSideA = 0,
 		marbleCountSideB = 0;
@@ -363,37 +440,9 @@ void runApplication::endOfGame(std::string emptyThisSide, sf::RenderWindow& main
 		//tie
 		winner = 0;
 	}
-
-	// Render
-	mainWindow.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
 	
 	//Who won?
-	switch (winner) {
-		case 1: {
-			sf::Text winnerText("Player 1 wins!", this->statusFont, 20);
-			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
-			mainWindow.draw(winnerText);
-			mainWindow.display(); // Tell app that window is done drawing
-			system("pause");
-			break;
-		}
-		case 2: {
-			sf::Text winnerText("Player 2 wins!", this->statusFont, 20);
-			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
-			mainWindow.draw(winnerText);
-			mainWindow.display(); // Tell app that window is done drawing
-			system("pause");
-			break;
-		}
-		case 0: {
-			sf::Text winnerText("It's a tie!!", this->statusFont, 20);
-			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
-			mainWindow.draw(winnerText);
-			mainWindow.display(); // Tell app that window is done drawing
-			system("pause");
-			break;
-		}
-	}
+	return winner;
 }
 
 void runApplication::determineWinner() // Counts totals in the

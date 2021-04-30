@@ -26,6 +26,7 @@
     <ClInclude Include="pocketShape.hpp" />
     <ClInclude Include="RunApplication.hpp" />
     <ClInclude Include="standard.hpp" />
+    <ClInclude Include="wraptext.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
