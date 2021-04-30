@@ -8,7 +8,7 @@
 
 #pragma once
 
-#define ABORT_IF_KEY_NOT_2 if (key.size() > 2) { cout << "FATAL ERROR: KEY SIZE IS TOO SMALL!!!" << endl << "FUNC CALL: " << __FUNCTION__ << endl; std::abort(); }
+#define ABORT_IF_KEY_NOT_2 if (key.size() > 2) { std::cout << "FATAL ERROR: KEY SIZE IS TOO SMALL!!!" << std::endl << "FUNC CALL: " << __FUNCTION__ << std::endl; std::abort(); }
 
 namespace pockets {
 
