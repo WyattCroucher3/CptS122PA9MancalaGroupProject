@@ -9,7 +9,6 @@
 #pragma once
 
 #define ABORT_IF_KEY_NOT_2 if (key.size() > 2) { cout << "FATAL ERROR: KEY SIZE IS TOO SMALL!!!" << endl << "FUNC CALL: " << __FUNCTION__ << endl; std::abort(); }
-#define END_A (key == "A6")
 
 namespace pockets {
 
@@ -157,6 +156,8 @@ inline void nextPosition(string & key, const unsigned int & playerID) noexcept {
 /// - Version: 1.0
 inline string getOppositeFromKey(const string & key) noexcept {
     ABORT_IF_KEY_NOT_2
+    
+    if (key == "P1" || key == "P2") { return key; }
     
     string key1 = {'B',key[1]}, key2 = {'A',key[1]};
     
