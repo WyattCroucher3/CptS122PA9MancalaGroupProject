@@ -40,7 +40,7 @@ runApplication::~runApplication() {
 void runApplication::runApp() {
 	// Initialize Window, Textures, and Sprites
 	sf::RenderWindow window(sf::VideoMode(800, 350), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
-	window.setFramerateLimit(5);
+	window.setFramerateLimit(240);
 
 	//Variables
 	std::string statusText;
@@ -132,7 +132,7 @@ void runApplication::runApp() {
 							float minY = temp[0] == 'B' ? 0 : 150;
 							float maxY = minY + 150;
 							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber) && gameBoard[temp]->getMarble().size() > 0) {
-								std::pair<bool, bool> result = disperseBeads(temp);
+								std::pair<bool, bool> result = disperseBeads(temp, REDRAW_PARAMS);
 								if (!result.first) {
 									switchTurns();
 									statusText = "";
@@ -257,42 +257,47 @@ void runApplication::runApp() {
 			}
 		}
 		else {
-			// clear window
-			window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
-			// Draw sprite and pocket counts
-			window.draw(boardSprite);
-			buttonSprite.setPosition(0, 300);
-			window.draw(buttonSprite);
-			for (auto kv : gameBoard) {
-				auto marbles = kv.second->getMarble();
-				for (auto marble : marbles) {
-					window.draw(*marble);
-				}
-
-				sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
-				temporaryText.setPosition(this->pocketFontLocations.at(kv.first).first, this->pocketFontLocations.at(kv.first).second);
-				window.draw(temporaryText);
-			}
-
-			// Draw fonts
-
-			//Player indicator
-			sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
-			currentPlayerText.setPosition(60, 317);
-
-			sf::Text rulesIcon("?", this->statusFont, 15);
-			rulesIcon.setPosition(766, 317);
-			sf::Text statusBar(statusText, this->statusFont, 15);
-			statusBar.setPosition(430, 317);
-
-			window.draw(currentPlayerText);
-			window.draw(rulesIcon);
-			window.draw(statusBar);
-
-			window.display(); // Tell app that window is done drawing
-			winner = endOfGame("A");
+            buttonSprite.setPosition(0, 300);
+            this->redraw(REDRAW_PARAMS);
 		}
 	}
+}
+
+void runApplication::redraw(REDRAW_PARAMS_PROTO) {
+    
+    // clear window
+    window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
+    // Draw sprite and pocket counts
+    window.draw(boardSprite);
+    window.draw(buttonSprite);
+    for (auto kv : /*this->*/gameBoard) {
+        auto marbles = kv.second->getMarble();
+        for (auto marble : marbles) {
+            window.draw(*marble);
+        }
+        
+        sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
+        temporaryText.setPosition(/*this->*/pocketFontLocations.at(kv.first).first, /*this->*/pocketFontLocations.at(kv.first).second);
+        window.draw(temporaryText);
+    }
+    
+    // Draw fonts
+    
+    //Player indicator
+    sf::Text currentPlayerText("Player Number: " + std::to_string(/*this->*/playerNumber), /*this->*/statusFont, 15);
+    currentPlayerText.setPosition(60, 317);
+    
+    sf::Text rulesIcon("?", /*this->*/statusFont, 15);
+    rulesIcon.setPosition(766, 317);
+    
+    sf::Text statusBar(statusText, /*this->*/statusFont, 15);
+    statusBar.setPosition(430, 317);
+    
+    window.draw(currentPlayerText);
+    window.draw(rulesIcon);
+    window.draw(statusBar);
+    
+    window.display(); // Tell app that window is done drawing
 }
 
 void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
@@ -329,18 +334,90 @@ void runApplication::switchTurns() // Function rotates between players after eac
 	return;
 }
 
-std::pair<bool,bool> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+void runApplication::animateBeads(runApplication::AnimationData & data) {
+    // make sure both are even or odd
+    if (fmod(data.endX, 2) != fmod(data.startX,2)) { data.endX += 1; }
+    
+    // make sure both are even or odd
+    if (fmod(data.endY, 2) != fmod(data.startY,2)) { data.endY += 1; }
+    
+    float curX = data.startX, curY = data.startY;
+    
+    while ((data.endX != curX) || (data.endY != curY)) {
+        
+        float moveY = data.endY != curY ? 2 : 0;
+        if (data.negativeY) { moveY *= -1; }
+        float moveX = data.endX != curX ? 2 : 0;
+        if (data.negativeX) { moveX *= -1; }
+        
+        data.target->move(moveX, moveY);
+        curX = data.target->getPosition().x;
+        curY = data.target->getPosition().y;
+        
+        data.runner->redraw(*data.window, data.statusText, *data.boardSprite, *data.buttonSprite);
+    }
+}
+
+//const void runApplication::animateBeads(runApplication * runner, sf::Sprite * target, const float & startX, float & endX, const float & startY, float & endY, const bool & negativeY, const bool & negativeX, REDRAW_PARAMS_PROTO) {
+//    // make sure both are even or odd
+//    if (fmod(endX, 2) != fmod(startX,2)) { endX += 1; }
+//
+//    // make sure both are even or odd
+//    if (fmod(endY, 2) != fmod(startY,2)) { endY += 1; }
+//
+//    float curX = startX, curY = startY;
+//
+//    while ((endX != curX) || (endY != curY)) {
+//
+//        float moveY = endY != curY ? 2 : 0;
+//        if (negativeY) { moveY *= -1; }
+//        float moveX = endX != curX ? 2 : 0;
+//        if (negativeX) { moveX *= -1; }
+//
+//        target->move(moveX, moveY);
+//        curX = target->getPosition().x;
+//        curY = target->getPosition().y;
+//
+//        runner->redraw(REDRAW_PARAMS);
+//    }
+//}
+
+std::pair<bool,bool> runApplication::disperseBeads(const std::string & pocketName, REDRAW_PARAMS_PROTO) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
 {
 	std::string temp = pocketName;
 	bool capture = false;
+    
 	for (auto target : gameBoard[pocketName]->getMarble()) {
 		// sound
 		pockets::nextPosition(temp, playerNumber);
+        
+        runApplication::AnimationData data;
+        float startX = target->getPosition().x;
+        float startY = target->getPosition().y;
 		float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
 		float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
-		float deltaX = x - target->getPosition().x;
-		float deltaY = y - target->getPosition().y;
-		target->move(sf::Vector2f(deltaX, deltaY));
+//        float deltaX = x - startX;
+//		float deltaY = y - startY;
+//		target->move(sf::Vector2f(deltaX, deltaY));
+        
+        data.runner = this;
+        data.target = target;
+        data.startX = startX;
+        data.endX = x;
+        data.startY = startY;
+        data.endY = y;
+        data.negativeY = y - startY < 0;
+        data.negativeX = x - startX < 0;
+        data.window = &window;
+        data.statusText = statusText;
+        data.boardSprite = &boardSprite;
+        data.buttonSprite = &buttonSprite;
+        
+        // trying to get this to run at same time for all marbles.
+        // moves marbles as is
+        sf::Thread thread (&runApplication::animateBeads, data);
+        thread.launch();
+        
 		gameBoard[temp]->addMarble(target);
 	}
 	gameBoard[pocketName]->getMarble().clear();
