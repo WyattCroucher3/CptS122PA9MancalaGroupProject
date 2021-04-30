@@ -1,15 +1,15 @@
 //
-//  pockets_unit_test.hpp
+//  pockets_methods_unit_test.hpp
 //  Final Proj
 //
 //  Created by Kyle Parker on 4/27/21.
 //  Copyright © 2021 Kyle Parker. All rights reserved.
 //
 
-#ifndef pockets_unit_test_hpp
-#define pockets_unit_test_hpp
+#ifndef pockets_methods_unit_test_hpp
+#define pockets_methods_unit_test_hpp
 
-class pockets_unit_test final {
+class pockets_methods_unit_test final {
     const std::list<string> keys = {"A1", "A2", "A3", "A4", "A5", "A6", "P2", "B6", "B5", "B4", "B3", "B2", "B1", "P1"};
     
     // tests pockets::nextPosition method againist know pattern, keys.
@@ -199,4 +199,4 @@ public:
     }
 };
 
-#endif /* pockets_unit_test_hpp */
+#endif /* pockets_methods_unit_test_hpp */

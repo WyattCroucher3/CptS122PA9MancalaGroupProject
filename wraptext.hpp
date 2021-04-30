@@ -8,7 +8,7 @@
 #define wraptext_hpp
 
 inline sf::String wrapText(sf::String string, unsigned width, const sf::Font &font, unsigned charicterSize, bool bold = false){
-    unsigned currentOffset = 0;
+    float currentOffset = 0;
     bool firstWord = true;
     std::size_t wordBegining = 0;
     

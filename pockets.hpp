@@ -16,10 +16,13 @@ class Pocket {
 protected:
     PocketShape shapeSprite;
     
-    Pocket(string & setID) {
-        //shapeSprite.setID(setID);
-    }
+//    Pocket(string & setID) {
+//        //shapeSprite.setID(setID);
+//    }
 public:
+    
+    virtual ~Pocket(void) {}
+    
     /// Update the count and image reflecting the new value.
     ///
     /// - Precondition: marble was dropped or hole was picked up
@@ -43,8 +46,8 @@ public:
 class MancalaPocket final : public Pocket {
     unsigned int owner;
 public:
-    MancalaPocket(string & setID,
-                  unsigned int & player) : Pocket(setID) {
+    MancalaPocket(/*string & setID,*/
+                  unsigned int & player) /*: Pocket(setID)*/ {
         this->owner = player;
         //        this->updateCount((int)setCount);
     }
@@ -67,11 +70,9 @@ public:
     }
 };
 
-typedef unordered_map<string, Pocket*> pocketMap;
-
 class BoardPocket final : public Pocket {
 public:
-    BoardPocket(string & setID) : Pocket (setID) {
+    BoardPocket(/*string & setID*/void)/* : Pocket (setID)*/ {
         //        this->updateCount((int)setCount);
     }
     
@@ -107,7 +108,7 @@ inline void setupMap(unordered_map<string, Pocket*> & target) noexcept {
                 string key = "P";
                 key += std::to_string(second);
                 
-                MancalaPocket * p = new MancalaPocket(key, second);
+                MancalaPocket * p = new MancalaPocket(/*key, */second);
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
                 
                 target.insert(std::make_pair(key, pocket));
@@ -118,7 +119,7 @@ inline void setupMap(unordered_map<string, Pocket*> & target) noexcept {
                 
                 key += std::to_string(second);
                 
-                BoardPocket * p = new BoardPocket(key);
+                BoardPocket * p = new BoardPocket(/*key*/);
                 Pocket * pocket = dynamic_cast<Pocket*>(p);
                 
                 target.insert(std::make_pair(key, pocket));
@@ -171,9 +172,12 @@ inline string getOppositeFromKey(const string & key) noexcept {
 /// - Parameter key:  the key to test against.
 /// - Returns:  a boolean that determines if the hole passed via key is owned by this player
 /// - Version: 1.0
-inline bool ownsPocket(const string & key, int & owner) {
+inline bool ownsPocket(const string & key, unsigned int & owner) {
     ABORT_IF_KEY_NOT_2
     return (owner == 1 && key[0]== 'B') || (owner == 2 && key[0] == 'A');
 }
+
+// define types for pockets
+typedef unordered_map<string, Pocket*> pocketMap;
 
 }
