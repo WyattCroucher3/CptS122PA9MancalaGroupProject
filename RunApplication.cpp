@@ -2,6 +2,7 @@
 #include <time.h>
 	
 sf::Texture runApplication::boardTexture;
+sf::Texture runApplication::buttonsTexture;
 sf::Texture runApplication::marbleTexture1;
 sf::Texture runApplication::marbleTexture0;
 sf::Font runApplication::pocketFont;
@@ -12,74 +13,12 @@ runApplication::runApplication()
 	pockets::setupMap(this->gameBoard);
 	srand((unsigned int)time(NULL));
 	runApplication::boardTexture.loadFromFile("Images\\gameAssets\\mancalaBoard.png");
+	runApplication::buttonsTexture.loadFromFile("Images\\gameAssets\\buttons.png");
 	runApplication::marbleTexture0.loadFromFile("Images\\gameAssets\\marble0.png");
 	runApplication::marbleTexture1.loadFromFile("Images\\gameAssets\\marble1.png");
 	runApplication::pocketFont.loadFromFile("game_over.ttf");
 	runApplication::statusFont.loadFromFile("bubbly.ttf");
 }
-
-//void runApplication::runApp() // This is where all the functions will be called for runApplication
-//{
-//	int mainOption = 0, turn = 0;
-//
-//
-//	// Choice 1: Play game
-//	// Choice 2: How to play
-//	// Choice 3: Exit application
-//
-//	do { // loops till user wants to exit game
-//
-//		mainOption = mainMenu();
-//
-//		if (mainOption == 1) // User wants to play the game
-//		{
-//			bool gameOver = false, goAgain = false, capture = false;
-//
-//			turn = whoGoesFirst(); // Player who goes first is picked at random
-//
-//			do { // Loops until one player has no beads on their side
-//
-//				do {
-//
-//					selectPocket(); //pocket is selected by the user
-//					goAgain = disperseBeads(); //beads are moved counterclockwise around the board
-//
-//				} while (goAgain == true); // will loop is a bead lands in the mancala pocket
-//				
-//				capture = determineCapture(); // determines if the player cets to "capture" the opponents beads
-//
-//				if (capture == true)
-//				{
-//					captureAndScore(); // Captures if determined to be true
-//				}
-//
-//				gameOver = endOfGame(); // Checks to see if the game has ended
-//
-//                if (endOfGame() == false)
-//				{
-//					switchTurns(turn); // If the game isn't over, the players switch turns
-//				}
-//
-//			} while (gameOver == false); // If the game is over, we break out of the loop
-//
-//			determineWinner(); // A winner is determined by the contents of their mancala pockets
-//
-//		}
-//		if (mainOption == 2) // User selected the tutorial
-//		{
-//
-//			displayRules();
-//
-//		}
-//		else
-//		{
-//
-//		}
-//
-//	} while (mainOption >= 1 && mainOption <= 2);
-//
-//	return;
-//}
 
 void runApplication::runApp() {
 
@@ -90,14 +29,17 @@ void runApplication::runApp() {
 
 	// Who goes first
 	whoGoesFirst();
-	// create board sprite
+	// create sprites
 	sf::Sprite boardSprite;
+	sf::Sprite buttonSprite;
 
-	// set Textures for board
+	// set Textures 
 	boardSprite.setTexture(runApplication::boardTexture);
+	buttonSprite.setTexture(runApplication::buttonsTexture);
 
 	// initialize board with marbles
 	int offset = 13;
+	float pocketOffset = 30;
 	for (auto kb : gameBoard) {
 
 
@@ -122,16 +64,17 @@ void runApplication::runApp() {
 		}
 		else {
 			if (kb.first == "P1") {
-				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)offset, (float)(100 - offset), (float)offset, (float)(300 - offset) })));
+				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
 			}
 			else {
-				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)(700 + offset), (float)(800 - offset), (float)offset, (float)(300 - offset) })));
+				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
 			}
 
 		}
 	}
 
 	bool changePlayers = true;
+
 	sf::Event ev;
 	while (window.isOpen())
 	{
@@ -143,9 +86,7 @@ void runApplication::runApp() {
 				window.close();
 				break;
 			case sf::Event::MouseButtonPressed:
-				std::cout << "click occurred" << std::endl;
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-					std::cout << "left mouse button press occurred" << std::endl;
 					auto position = sf::Mouse::getPosition(window);
 					for (auto kb : gameBoard) {
 						if (kb.first != "P1" && kb.first != "P2") {
@@ -154,15 +95,36 @@ void runApplication::runApp() {
 							float maxX = minX + 100;
 							float minY = temp[0] == 'B' ? 0 : 150;
 							float maxY = minY + 150;
-							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber)) {
-								std::pair<bool, std::pair<std::string,bool>> result = disperseBeads(temp);
-								if (result.first) {
-									changePlayers = false;
-									//if (result.second.second) {
-										//std::string pocket = pockets::getOppositeFromKey(result.second.first);
-									//}
+							if (position.x > minX && position.x < maxX && position.y > minY && position.y < maxY && pockets::ownsPocket(temp, this->playerNumber) && gameBoard[temp]->getMarble().size() > 0) {
+								if (!disperseBeads(temp)) {
+									switchTurns();
 								}
-								break;
+								bool sideOneEmpty = false,
+									sideTwoEmpty = false;
+								int marbleCountA = 0,
+									marbleCountB = 0;
+								for (auto pocketName : gameBoard) {
+									if (pocketName.first.at(0) == 'A') {
+										for (auto marble : pocketName.second->getMarble()) {
+											++marbleCountA;
+										}
+
+									}
+									if (pocketName.first.at(0) == 'B') {
+										for (auto marble : pocketName.second->getMarble()) {
+											++marbleCountB;
+										}
+									}
+								}
+								if (marbleCountA == 0) {
+									sideOneEmpty = true;
+								}
+								else if (marbleCountB == 0) {
+									sideTwoEmpty = true;
+								}
+								if (sideOneEmpty || sideTwoEmpty) {
+									endOfGame(sideOneEmpty ? "B" : "A", window);
+								}
 							}
 						}
 					}
@@ -177,6 +139,8 @@ void runApplication::runApp() {
 
 		// Draw sprite and pocket counts
 		window.draw(boardSprite);
+		buttonSprite.setPosition(0, 300);
+		window.draw(buttonSprite);
 		for (auto kb : gameBoard) {
 			auto marbles = kb.second->getMarble();
 			for (auto marble : marbles) {
@@ -191,8 +155,8 @@ void runApplication::runApp() {
 		// Draw fonts
 		
 		//Player indicator
-		sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 20);
-		currentPlayerText.setPosition(0, 300);
+		sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
+		currentPlayerText.setPosition(60, 317);
 		window.draw(currentPlayerText);
 		window.display(); // Tell app that window is done drawing
 	}
@@ -232,16 +196,12 @@ void runApplication::selectPocket() // User selects a pocket to begin their turn
 
 }
 
-std::pair<bool, std::pair<std::string, bool>> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+bool runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
 {
-	std::cout << "Player Number: " << this->playerNumber << std::endl;
 	std::string temp = pocketName;
-	std::cout << "PocketName: " << pocketName << std::endl;
-	std::cout << "Size: " << gameBoard[pocketName]->getMarble().size() << std::endl;
 	for (auto target : gameBoard[pocketName]->getMarble()) {
 		// sound
 		pockets::nextPosition(temp, playerNumber);
-		std::cout << "Next Position: " << temp << std::endl;
 		float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
 		float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
 		float deltaX = x - target->getPosition().x;
@@ -271,7 +231,7 @@ std::pair<bool, std::pair<std::string, bool>> runApplication::disperseBeads(cons
 		gameBoard[temp]->getMarble().clear();
 		gameBoard[opposite]->getMarble().clear();
 	}
-	return std::make_pair(false, std::make_pair("", false));
+	return temp == (playerNumber == 1 ? "P1" : (playerNumber == 2 ? "P2" : "")); // if playerNumber == 1, then P1, else check if playerNumber == 2, then P2 else return false
 }
 
 bool runApplication::determineCapture(const std::string &pocketName) // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
@@ -287,14 +247,99 @@ bool runApplication::determineCapture(const std::string &pocketName) // Checks t
 	return false;
 }
 
-void runApplication::captureAndScore() // Performs the capture action
+void runApplication::endOfGame(std::string emptyThisSide, sf::RenderWindow& mainWindow) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
 {
-	
-}
+	int marbleCountSideA = 0,
+		marbleCountSideB = 0;
+	if (emptyThisSide == "A") {
+		// empty side A
+		for (auto kb : gameBoard) {
+			if (kb.first.at(0) == 'A') {
+				for (auto marble : kb.second->getMarble()) {
+					float x = determineValidLocation(pocketPositions["P2"].at(0), pocketPositions["P2"].at(1));
+					float y = determineValidLocation(pocketPositions["P2"].at(2), pocketPositions["P2"].at(3));
+					float deltaX = x - marble->getPosition().x;
+					float deltaY = y - marble->getPosition().y;
+					marble->move(sf::Vector2f(deltaX, deltaY));
+					gameBoard["P2"]->addMarble(marble);
+				}
+			}
+		}
 
-bool runApplication::endOfGame() // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
-{
-	return true;
+			for (auto marble : gameBoard["P1"]->getMarble()) {
+				++marbleCountSideA;
+			}
+			for (auto marble : gameBoard["P2"]->getMarble()) {
+				++marbleCountSideB;
+			}
+		}
+	else {
+		// empty side B
+		for (auto kb : gameBoard) {
+			if (kb.first.at(0) == 'B') {
+				for (auto marble : kb.second->getMarble()) {
+					float x = determineValidLocation(pocketPositions["P1"].at(0), pocketPositions["P1"].at(1));
+					float y = determineValidLocation(pocketPositions["P1"].at(2), pocketPositions["P1"].at(3));
+					float deltaX = x - marble->getPosition().x;
+					float deltaY = y - marble->getPosition().y;
+					marble->move(sf::Vector2f(deltaX, deltaY));
+					gameBoard["P1"]->addMarble(marble);
+				}
+			}
+		}
+
+		for (auto marble : gameBoard["P1"]->getMarble()) {
+			++marbleCountSideA;
+		}
+		for (auto marble : gameBoard["P2"]->getMarble()) {
+			++marbleCountSideB;
+		}
+	}
+
+	int winner = -1;
+	if (marbleCountSideA > marbleCountSideB) {
+		// Player 1 wins
+		winner = 1;
+	}
+	else if (marbleCountSideA < marbleCountSideB) {
+		// Player 2 wins
+		winner = 2;
+	}
+	else {
+		//tie
+		winner = 0;
+	}
+
+	// Render
+	mainWindow.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
+	
+	//Who won?
+	switch (winner) {
+		case 1: {
+			sf::Text winnerText("Player 1 wins!", this->statusFont, 20);
+			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
+			mainWindow.draw(winnerText);
+			mainWindow.display(); // Tell app that window is done drawing
+			system("pause");
+			break;
+		}
+		case 2: {
+			sf::Text winnerText("Player 2 wins!", this->statusFont, 20);
+			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
+			mainWindow.draw(winnerText);
+			mainWindow.display(); // Tell app that window is done drawing
+			system("pause");
+			break;
+		}
+		case 0: {
+			sf::Text winnerText("It's a tie!!", this->statusFont, 20);
+			winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((350 - winnerText.getGlobalBounds().height) / 2));
+			mainWindow.draw(winnerText);
+			mainWindow.display(); // Tell app that window is done drawing
+			system("pause");
+			break;
+		}
+	}
 }
 
 void runApplication::determineWinner() // Counts totals in the
