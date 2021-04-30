@@ -29,6 +29,14 @@ runApplication::runApplication()
 #endif
 }
 
+runApplication::~runApplication() {
+    for (auto kv : this->gameBoard) {
+        if (kv.second != nullptr) {
+            delete kv.second;
+        }
+    }
+}
+
 void runApplication::runApp() {
 	// Initialize Window, Textures, and Sprites
 	sf::RenderWindow window(sf::VideoMode(800, 350), "Mancala Game", sf::Style::Titlebar | sf::Style::Close);
@@ -56,34 +64,34 @@ void runApplication::runApp() {
 	// initialize board with marbles
 	int offset = 13;
 	float pocketOffset = 30;
-	for (auto kb : gameBoard) {
+	for (auto kv : gameBoard) {
 
 
-		if (kb.first != "P1" && kb.first != "P2") {
-			std::string temp = kb.first;
+		if (kv.first != "P1" && kv.first != "P2") {
+			std::string temp = kv.first;
 			float minX = atoi(&temp[1]) * 100 + offset;
 			float maxX = minX + 60 - offset;
 			float minY = temp[0] == 'B' ? offset : 150 + offset;
 			float maxY = minY + 90 - offset;
-			pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ minX, maxX, minY, maxY })));
+			pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ minX, maxX, minY, maxY })));
 
 			for (int index = 0; index < 4; ++index) {
 				float x = rand() % (int)(maxX - minX) + minX;
 				float y = rand() % (int)(maxY - minY) + minY;
 				if (index % 2) {
-					kb.second->addMarble(runApplication::marbleTexture1, sf::Vector2f(x, y));
+					kv.second->addMarble(runApplication::marbleTexture1, sf::Vector2f(x, y));
 				}
 				else {
-					kb.second->addMarble(runApplication::marbleTexture0, sf::Vector2f(x, y));
+					kv.second->addMarble(runApplication::marbleTexture0, sf::Vector2f(x, y));
 				}
 			}
 		}
 		else {
-			if (kb.first == "P1") {
-				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+			if (kv.first == "P1") {
+				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
 			}
 			else {
-				pocketPositions.insert(std::make_pair(kb.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
 			}
 
 		}
@@ -116,9 +124,9 @@ void runApplication::runApp() {
 					}
 					else if (position.y > 300) { break; }
 
-					for (auto kb : gameBoard) {
-						if (kb.first != "P1" && kb.first != "P2") {
-							std::string temp = kb.first;
+					for (auto kv : gameBoard) {
+						if (kv.first != "P1" && kv.first != "P2") {
+							std::string temp = kv.first;
 							float minX = atoi(&temp[1]) * 100;
 							float maxX = minX + 100;
 							float minY = temp[0] == 'B' ? 0 : 150;
@@ -149,15 +157,21 @@ void runApplication::runApp() {
 									marbleCountB = 0;
 								for (auto pocketName : gameBoard) {
 									if (pocketName.first.at(0) == 'A') {
-										for (auto marble : pocketName.second->getMarble()) {
-											++marbleCountA;
-										}
+                                        
+                                        marbleCountA += pocketName.second->count();
+                                        
+//										for (auto marble : pocketName.second->getMarble()) {
+//											++marbleCountA;
+//										}
 
 									}
 									if (pocketName.first.at(0) == 'B') {
-										for (auto marble : pocketName.second->getMarble()) {
-											++marbleCountB;
-										}
+                                        
+                                        marbleCountB += pocketName.second->count();
+                                        
+//										for (auto marble : pocketName.second->getMarble()) {
+//											++marbleCountB;
+//										}
 									}
 								}
 								if (marbleCountA == 0) {
@@ -192,14 +206,14 @@ void runApplication::runApp() {
 			window.draw(boardSprite);
 			buttonSprite.setPosition(0, 300);
 			window.draw(buttonSprite);
-			for (auto kb : gameBoard) {
-				auto marbles = kb.second->getMarble();
+			for (auto kv : gameBoard) {
+				auto marbles = kv.second->getMarble();
 				for (auto marble : marbles) {
 					window.draw(*marble);
 				}
 
 				sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
-				temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
+				temporaryText.setPosition(this->pocketFontLocations.at(kv.first).first, this->pocketFontLocations.at(kv.first).second);
 				window.draw(temporaryText);
 			}
 
@@ -249,14 +263,14 @@ void runApplication::runApp() {
 			window.draw(boardSprite);
 			buttonSprite.setPosition(0, 300);
 			window.draw(buttonSprite);
-			for (auto kb : gameBoard) {
-				auto marbles = kb.second->getMarble();
+			for (auto kv : gameBoard) {
+				auto marbles = kv.second->getMarble();
 				for (auto marble : marbles) {
 					window.draw(*marble);
 				}
 
 				sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
-				temporaryText.setPosition(this->pocketFontLocations.at(kb.first).first, this->pocketFontLocations.at(kb.first).second);
+				temporaryText.setPosition(this->pocketFontLocations.at(kv.first).first, this->pocketFontLocations.at(kv.first).second);
 				window.draw(temporaryText);
 			}
 
@@ -276,21 +290,15 @@ void runApplication::runApp() {
 			window.draw(statusBar);
 
 			window.display(); // Tell app that window is done drawing
-			winner = endOfGame("B");
+			winner = endOfGame("A");
 		}
 	}
-}
-
-int runApplication::mainMenu()
-{
-	return 0;
 }
 
 void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
 {
     sf::RectangleShape view(sf::Vector2f(800,350));
     view.setFillColor(sf::Color::Black);
-    // "Welcome to the ancient strategy game of Mancala!\n\nThe rules of this game are simple: players will take turns selecting pockets from their\nside of the board, and after a choice\nis made, the marbles from that pocket are dropped in pockets rotating counterclockwise\naround the board. Players score points\nby dropping marbles in their scoring pocket (the larger pocket to the right of the players board pockets) as they move around the board. Players only\ndrop marbles in their own scoring pocket, and skip their opponents scoring pocket if they make it around the entire board.\n\nThere are just a few other rules to keep in mind: if you pick a pocket that has the perfect number of marbles to land in your scoring pocket, you get to\ngo again! Also, if you select a pocket in which your last marble lands in an empty pocket on your side of the board, and the opposing pocket on your\nopponent’s side has one or more marbles in it, then you get to “capture” your opponent’s marbles (and your single marble) and add them to your scoring\npocket!\n\nThe game ends once one player clears all the marbles on their side of the board. All remaining marbles on the opponent’s side of the board\nare then added to the opponents scoring pocket. The player with the most marbles in their scoring pocket at the end of the game wins!"
     
     
     sf::Text _text(wrapText("Welcome to the ancient strategy game of Mancala!\n\nThe rules of this game are simple: players will take turns selecting pockets from their side of the board, and after a choice is made, the marbles from that pocket are dropped in pockets rotating counterclockwise around the board. Players score points by dropping marbles in their scoring pocket (the larger pocket to the right of the players board pockets) as they move around the board. Players only drop marbles in their own scoring pocket, and skip their opponents scoring pocket if they make it around the entire board.\n\nThere are just a few other rules to keep in mind: if you pick a pocket that has the perfect number of marbles to land in your scoring pocket, you get to go again! Also, if you select a pocket in which your last marble lands in an empty pocket on your side of the board, and the opposing pocket on your opponent's side has one or more marbles in it, then you get to \"capture\" your opponent's marbles (and your single marble) and add them to your scoring pocket!\n\nThe game ends once one player clears all the marbles on their side of the board. All remaining marbles on the opponent's side of the board are then added to the opponent's scoring pocket. The player with the most marbles in their scoring pocket at the end of the game wins!\n\n[Press return to continue...]", 800, this->statusFont, 12), this->statusFont, 12);
@@ -307,7 +315,7 @@ inline void runApplication::whoGoesFirst() // Function return a random integer (
 	playerNumber = rand() % 2 + 1;
 }
 
-void runApplication::switchTurns(void) // Function rotates between players after each turn
+void runApplication::switchTurns() // Function rotates between players after each turn
 {
 	if (playerNumber == 1)
 	{
@@ -319,11 +327,6 @@ void runApplication::switchTurns(void) // Function rotates between players after
 	}
 
 	return;
-}
-
-void runApplication::selectPocket() // User selects a pocket to begin their turn; function validates the choice as a valid option
-{
-
 }
 
 std::pair<bool,bool> runApplication::disperseBeads(const std::string pocketName) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
@@ -378,15 +381,16 @@ bool runApplication::determineCapture(const std::string &pocketName) // Checks t
 	return false;
 }
 
-int runApplication::endOfGame(std::string emptyThisSide) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
+int runApplication::endOfGame(const std::string & emptyThisSide) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
 {
 	int marbleCountSideA = 0,
 		marbleCountSideB = 0;
+    
 	if (emptyThisSide == "A") {
 		// empty side A
-		for (auto kb : gameBoard) {
-			if (kb.first.at(0) == 'A') {
-				for (auto marble : kb.second->getMarble()) {
+		for (auto kv : gameBoard) {
+			if (kv.first.at(0) == 'A') {
+				for (auto marble : kv.second->getMarble()) {
 					float x = determineValidLocation(pocketPositions["P2"].at(0), pocketPositions["P2"].at(1));
 					float y = determineValidLocation(pocketPositions["P2"].at(2), pocketPositions["P2"].at(3));
 					float deltaX = x - marble->getPosition().x;
@@ -396,19 +400,15 @@ int runApplication::endOfGame(std::string emptyThisSide) // returns true if the 
 				}
 			}
 		}
-
-			for (auto marble : gameBoard["P1"]->getMarble()) {
-				++marbleCountSideA;
-			}
-			for (auto marble : gameBoard["P2"]->getMarble()) {
-				++marbleCountSideB;
-			}
+        
+        marbleCountSideA = (int)gameBoard["P1"]->count();
+        marbleCountSideB = (int)gameBoard["P2"]->count();
 		}
 	else {
 		// empty side B
-		for (auto kb : gameBoard) {
-			if (kb.first.at(0) == 'B') {
-				for (auto marble : kb.second->getMarble()) {
+		for (auto kv : gameBoard) {
+			if (kv.first.at(0) == 'B') {
+				for (auto marble : kv.second->getMarble()) {
 					float x = determineValidLocation(pocketPositions["P1"].at(0), pocketPositions["P1"].at(1));
 					float y = determineValidLocation(pocketPositions["P1"].at(2), pocketPositions["P1"].at(3));
 					float deltaX = x - marble->getPosition().x;
@@ -419,12 +419,8 @@ int runApplication::endOfGame(std::string emptyThisSide) // returns true if the 
 			}
 		}
 
-		for (auto marble : gameBoard["P1"]->getMarble()) {
-			++marbleCountSideA;
-		}
-		for (auto marble : gameBoard["P2"]->getMarble()) {
-			++marbleCountSideB;
-		}
+        marbleCountSideA = (int)gameBoard["P1"]->count();
+        marbleCountSideB = (int)gameBoard["P2"]->count();
 	}
 
 	int winner = -1;
@@ -444,12 +440,6 @@ int runApplication::endOfGame(std::string emptyThisSide) // returns true if the 
 	//Who won?
 	return winner;
 }
-
-void runApplication::determineWinner() // Counts totals in the
-{
-
-}
-
 
 inline float runApplication::determineValidLocation(float min, float max) {
 	return rand() % (int)(max - min) + min;

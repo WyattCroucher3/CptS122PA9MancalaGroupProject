@@ -19,7 +19,7 @@ class pockets_methods_unit_test final {
         
         auto startTime = time(0);
         
-        cout << "Beginning test on pockets::nextPosition(std::string,UInt) at " << startTime << endl;
+        std::cout << "Beginning test on pockets::nextPosition(std::string,UInt) at " << startTime << std::endl;
         
         long x = 1, success = 0, fail = 0;
         
@@ -57,8 +57,8 @@ class pockets_methods_unit_test final {
                 }
             }
         }
-        cout << success << " succeeded, " << fail << " failed." << endl;
-        cout << "Operation completed after " << (time(0) - startTime) << " seconds." << endl;
+        std::cout << success << " succeeded, " << fail << " failed." << std::endl;
+        std::cout << "Operation completed after " << (time(0) - startTime) << " seconds." << std::endl;
     }
     
     // test ownership of pockets.
@@ -66,7 +66,7 @@ class pockets_methods_unit_test final {
         
         auto startTime = time(0);
         
-        cout << "Beginning test on pockets::nextPosition(std::string,UInt) at " << startTime << endl;
+        std::cout << "Beginning test on pockets::nextPosition(std::string,UInt) at " << startTime << std::endl;
         
         long success = 0, fail = 0;
         
@@ -98,14 +98,14 @@ class pockets_methods_unit_test final {
             }
         }
         
-        cout << success << " succeeded, " << fail << " failed." << endl;
-        cout << "Operation completed after " << (time(0) - startTime) << " seconds." << endl;
+        std::cout << success << " succeeded, " << fail << " failed." << std::endl;
+        std::cout << "Operation completed after " << (time(0) - startTime) << " seconds." << std::endl;
     }
     
     void runTestOnOppositeKey(void) {
         auto startTime = time(0);
         
-        cout << "Beginning test on pockets::getOppositeFromKey(std::string) at " << startTime << endl;
+        std::cout << "Beginning test on pockets::getOppositeFromKey(std::string) at " << startTime << std::endl;
         
         long success = 0, fail = 0;
         
@@ -132,14 +132,14 @@ class pockets_methods_unit_test final {
             }
         }
         
-        cout << success << " succeeded, " << fail << " failed." << endl;
-        cout << "Operation completed after " << (time(0) - startTime) << " seconds." << endl;
+        std::cout << success << " succeeded, " << fail << " failed." << std::endl;
+        std::cout << "Operation completed after " << (time(0) - startTime) << " seconds." << std::endl;
     }
     
     void runTestOnCreatePocketMap(void) {
         auto startTime = time(0);
         
-        cout << "Beginning test on pockets::setupMap(unordered_map<string, Pocket*>) at " << startTime << endl;
+        std::cout << "Beginning test on pockets::setupMap(unordered_map<string, Pocket*>) at " << startTime << std::endl;
         
         long success = 0, fail = 0;
         
@@ -175,27 +175,27 @@ class pockets_methods_unit_test final {
             }
         }
         
-        cout << success << " succeeded, " << fail << " failed." << endl;
-        cout << "Operation completed after " << (time(0) - startTime) << " seconds." << endl;
+        std::cout << success << " succeeded, " << fail << " failed." << std::endl;
+        std::cout << "Operation completed after " << (time(0) - startTime) << " seconds." << std::endl;
     }
     
 public:
     pockets_unit_test(void) {
         time_t startTime = time(0);
-        cout << "Beginning tests at " << startTime << "." << endl;
-        cout << "Run `runTestOnNextPosition`... (" << startTime << ")." << endl;
+        std::cout << "Beginning tests at " << startTime << "." << std::endl;
+        std::cout << "Run `runTestOnNextPosition`... (" << startTime << ")." << std::endl;
         this->runTestOnNextPosition();
-        out << "Test `runTestOnNextPosition` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << endl;
-        cout << "Run `runTestOnOwnership`... (" << startTime << ")." << endl;
+        out << "Test `runTestOnNextPosition` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
+        std::cout << "Run `runTestOnOwnership`... (" << startTime << ")." << std::endl;
         this->runTestOnOwnership();
-        out << "Test `runTestOnOwnership` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << endl;
-        cout << "Run `runTestOnOppositeKey`... (" << startTime << ")." << endl;
+        out << "Test `runTestOnOwnership` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
+        std::cout << "Run `runTestOnOppositeKey`... (" << startTime << ")." << std::endl;
         this->runTestOnOppositeKey();
-        out << "Test `runTestOnOppositeKey` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << endl;
-        cout << "Run `runTestOnCreatePocketMap`... (" << startTime << ")." << endl;
+        out << "Test `runTestOnOppositeKey` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
+        std::cout << "Run `runTestOnCreatePocketMap`... (" << startTime << ")." << std::endl;
         this->runTestOnCreatePocketMap();
-        out << "Test `runTestOnCreatePocketMap` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << endl;
-        out << "Tests finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << endl;
+        out << "Test `runTestOnCreatePocketMap` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
+        out << "Tests finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
     }
 };
 

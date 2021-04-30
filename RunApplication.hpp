@@ -2,28 +2,32 @@
 
 #include "Headers.hpp"
 
+class run_application_unit_tests;
+
 class runApplication
 {
 public:
-	runApplication();
+	runApplication(void);
+    
+    ~runApplication(void);
 
-	void runApp();
-
-	int mainMenu();
+	void runApp(void);
 	void displayRules(sf::RectangleShape & rect, sf::Text & text);
-	inline void whoGoesFirst(); // Function return a random integer (1 or 2) to determine which player goes first
+	inline void whoGoesFirst(void); // Function return a random integer (1 or 2) to determine which player goes first
 	void switchTurns(void);
 
-	void selectPocket(); // User selects a pocket to begin their turn; function validates the choice as a valid option
-	std::pair<bool,bool> disperseBeads(const std::string pocketName); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again 
+	std::pair<bool,bool> disperseBeads(const std::string pocketName); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
+    
 	bool determineCapture(const std::string& pocketName); // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
-	int endOfGame(std::string emptyThisSide); // accepts a string with a side to empty when the game is over
+    
+	int endOfGame(const std::string & emptyThisSide); // accepts a string with a side to empty when the game is over
 
-	void determineWinner(); // Counts totals in the 
 	inline float determineValidLocation(float min, float max);
+    
+    friend run_application_unit_tests;
 
 private:
-	int playerNumber;
+	unsigned int playerNumber;
 	static sf::Texture boardTexture;
 	static sf::Texture buttonsTexture;
 	static sf::Texture marbleTexture1;
