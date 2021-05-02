@@ -23,7 +23,7 @@ public:
     
     static void animateBeads(runApplication::AnimationData * data);
 
-    inline void loopForAnimation(const std::string &oldPocket, sf::Sprite *&target, const std::string &targetKey, REDRAW_PARAMS_PROTO, bool fast = false);
+    inline void loopForAnimation(const std::string &oldPocket, sf::Sprite *&target, const std::string &targetKey, REDRAW_PARAMS_PROTO, bool fast = false, bool isEndGame = false);
     
     std::pair<bool,bool> disperseBeads(const std::string & pocketName, REDRAW_PARAMS_PROTO); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
     

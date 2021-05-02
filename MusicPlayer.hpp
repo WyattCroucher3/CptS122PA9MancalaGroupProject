@@ -50,7 +50,6 @@ inline void playMusic(const std::string & path, const int & count = 1) {
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
 inline void playMusicWithV(const std::vector<std::string> & data) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     if (data.size() == 2) {
         playMusic(data.at(0), stoi(data.at(1)));
     } else {
@@ -67,8 +66,11 @@ inline void playMusicWithV(const std::vector<std::string> & data) {
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
 inline void playMusicAtPath(const std::string & path) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
-    playMusic(path);
+    try {
+        playMusic(path);
+    } catch (Error &e) {
+        std::cout << e;
+    }
 }
 
 /// plays the collect side sound once.
@@ -77,8 +79,11 @@ inline void playMusicAtPath(const std::string & path) {
 /// - Postcondition: sound played.
 /// - Version: 1.0
 inline void collectSide(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
-    playMusic("Audio/Collect Side.wav");
+    try {
+        playMusic("Audio/Collect Side.wav");
+    } catch (Error &e) {
+        std::cout << e;
+    }
 }
 
 /// sound when a certian amount of marbles will be present.
@@ -89,8 +94,7 @@ inline void collectSide(void) {
 /// - Postcondition: sound played.
 /// - Parameter count:  the number of marbles that are now in the hole, including the recently added one.
 /// - Version: 1.0
-inline void placeMarble(int & count) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
+inline void placeMarble(const unsigned long & count) {
     if (count < 0) { throw Error("Out of range. Value cannot be negative."); }
     
     std::string path = "Audio/Place ";
@@ -103,10 +107,15 @@ inline void placeMarble(int & count) {
         path += " Marble.wav";
         break;
     default: // >= 7
-        path += "7 Marbles.wav";
+        path += "7 Marble.wav";
         break;
     }
-    playMusic(path);
+    
+    try {
+        playMusic(path);
+    } catch (Error &e) {
+        std::cout << e;
+    }
     
 }
 
@@ -116,8 +125,11 @@ inline void placeMarble(int & count) {
 /// - Postcondition: Sound Played
 /// - Version: 1.0
 inline void resetSound(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
-    playMusic("Audio/Reset.wav");
+    try {
+        playMusic("Audio/Reset.wav");
+    } catch (Error &e) {
+        std::cout << e;
+    }
 }
 
 /// Play the sound when setting up the game
@@ -126,8 +138,11 @@ inline void resetSound(void) {
 /// - Postcondition: sound played.
 /// - Version: 1.0
 inline void setupSound(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
-    playMusic("Audio/Setup Marble.wav");
+    try {
+        playMusic("Audio/Setup Marble.wav");
+    } catch (Error &e) {
+        std::cout << e;
+    }
 }
 
 }
