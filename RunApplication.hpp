@@ -2,7 +2,7 @@
 
 #include "Headers.hpp"
 
-#define REDRAW_PARAMS_PROTO sf::RenderWindow & window, const std::string & statusText, sf::Sprite & boardSprite, sf::Sprite & buttonSprite
+#define REDRAW_PARAMS_PROTO sf::RenderWindow & window, std::string & statusText, sf::Sprite & boardSprite, sf::Sprite & buttonSprite
 #define REDRAW_PARAMS window, statusText, boardSprite, buttonSprite
 
 class run_application_unit_tests;
@@ -21,20 +21,24 @@ public:
 	void switchTurns(void);
     void redraw(REDRAW_PARAMS_PROTO);
     
-    static void animateBeads(runApplication::AnimationData & data);
-//    static const void animateBeads(runApplication * runner, sf::Sprite * target, const float & startX, float & endX, const float & startY, float & endY, const bool & negativeY, const bool & negativeX, REDRAW_PARAMS_PROTO);
+    static void animateBeads(runApplication::AnimationData * data);
 
-	std::pair<bool,bool> disperseBeads(const std::string & pocketName, REDRAW_PARAMS_PROTO); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
+    inline void loopForAnimation(const std::string &oldPocket, sf::Sprite *&target, const std::string &targetKey, REDRAW_PARAMS_PROTO, bool fast = false);
+    
+    std::pair<bool,bool> disperseBeads(const std::string & pocketName, REDRAW_PARAMS_PROTO); // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
     
 	bool determineCapture(const std::string& pocketName); // Checks to see if the bead landed on the players side, if the pocket was empty, and if there's any beads in the opposing pocket
     
-	int endOfGame(const std::string & emptyThisSide); // accepts a string with a side to empty when the game is over
+    void runAnimationForEndOfGame(std::pair<const std::basic_string<char>, pockets::Pocket *> &kv);
+    
+    int endOfGame(const std::string & emptyThisSide, REDRAW_PARAMS_PROTO); // accepts a string with a side to empty when the game is over
 
 	inline float determineValidLocation(float min, float max);
     
     friend run_application_unit_tests;
 
 private:
+    std::mutex mutex;
 	unsigned int playerNumber;
 	static sf::Texture boardTexture;
 	static sf::Texture buttonsTexture;
@@ -64,7 +68,7 @@ private:
     class AnimationData final {
     public:
         AnimationData(void) {}
-        AnimationData(runApplication * nrunner, sf::Sprite * ntarget, const float & nstartX, float & nendX, const float & nstartY, float & nendY, const bool & nnegativeY, const bool & nnegativeX, REDRAW_PARAMS_PROTO) {
+        AnimationData(runApplication * nrunner, sf::Sprite * ntarget, const float & nstartX, float & nendX, const float & nstartY, float & nendY, const bool & nnegativeY, const bool & nnegativeX, REDRAW_PARAMS_PROTO, bool nfast = false) {
             this->runner = nrunner;
             this->target = ntarget;
             this->startX = nstartX;
@@ -77,6 +81,7 @@ private:
             this->statusText = statusText;
             this->boardSprite = &boardSprite;
             this->buttonSprite = &buttonSprite;
+            this->fast = nfast;
         }
         ~AnimationData(void) {};
         runApplication * runner;
@@ -84,7 +89,7 @@ private:
         sf::Sprite * boardSprite;
         sf::Sprite * buttonSprite;
         float startX, endX, startY, endY;
-        bool negativeY, negativeX;
+        bool negativeY, negativeX, fast;
         sf::RenderWindow * window;
         std::string statusText;
     };

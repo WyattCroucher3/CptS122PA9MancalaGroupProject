@@ -57,7 +57,7 @@ void runApplication::runApp() {
 	sf::Sprite boardSprite;
 	sf::Sprite buttonSprite;
 
-	// set Textures 
+	// set Textures
 	boardSprite.setTexture(runApplication::boardTexture);
 	buttonSprite.setTexture(runApplication::buttonsTexture);
 
@@ -159,19 +159,10 @@ void runApplication::runApp() {
 									if (pocketName.first.at(0) == 'A') {
                                         
                                         marbleCountA += pocketName.second->count();
-                                        
-//										for (auto marble : pocketName.second->getMarble()) {
-//											++marbleCountA;
-//										}
-
 									}
 									if (pocketName.first.at(0) == 'B') {
                                         
                                         marbleCountB += pocketName.second->count();
-                                        
-//										for (auto marble : pocketName.second->getMarble()) {
-//											++marbleCountB;
-//										}
 									}
 								}
 								if (marbleCountA == 0) {
@@ -181,7 +172,7 @@ void runApplication::runApp() {
 									sideTwoEmpty = true;
 								}
 								if (sideOneEmpty || sideTwoEmpty) {
-									winner = endOfGame(sideOneEmpty ? "B" : "A");
+									winner = endOfGame(sideOneEmpty ? "B" : "A", REDRAW_PARAMS);
 								}
 							}
 						}
@@ -263,7 +254,11 @@ void runApplication::runApp() {
 	}
 }
 
+
+
 void runApplication::redraw(REDRAW_PARAMS_PROTO) {
+    
+    std::lock_guard<std::mutex> lockguard(mutex);
     
     // clear window
     window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
@@ -298,6 +293,8 @@ void runApplication::redraw(REDRAW_PARAMS_PROTO) {
     window.draw(statusBar);
     
     window.display(); // Tell app that window is done drawing
+    
+//    mutex.unlock();
 }
 
 void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
@@ -322,6 +319,7 @@ inline void runApplication::whoGoesFirst() // Function return a random integer (
 
 void runApplication::switchTurns() // Function rotates between players after each turn
 {
+//    std::lock_guard<std::mutex> lockguard(mutex);
 	if (playerNumber == 1)
 	{
 		playerNumber = 2;
@@ -331,10 +329,10 @@ void runApplication::switchTurns() // Function rotates between players after eac
 		playerNumber = 1;
 	}
 
-	return;
 }
 
-void runApplication::animateBeads(runApplication::AnimationData & data) {
+void runApplication::animateBeads(runApplication::AnimationData * dataPointer) {
+    runApplication::AnimationData data = *dataPointer;
     // make sure both are even or odd
     if (fmod(data.endX, 2) != fmod(data.startX,2)) { data.endX += 1; }
     
@@ -345,9 +343,21 @@ void runApplication::animateBeads(runApplication::AnimationData & data) {
     
     while ((data.endX != curX) || (data.endY != curY)) {
         
-        float moveY = data.endY != curY ? 2 : 0;
+        float moveY = data.endY != curY ? 1 : 0;
         if (data.negativeY) { moveY *= -1; }
-        float moveX = data.endX != curX ? 2 : 0;
+        float moveX = data.endX != curX ? 1 : 0;
+        
+        if (std::abs(curX - data.endX) > 500) {
+            moveX = 4;
+        } else if (std::abs(curX - data.endX) > 200) {
+            moveX = 2;
+        }
+        
+        if (data.fast) {
+            moveX *= 2;
+            moveY *= 2;
+        }
+        
         if (data.negativeX) { moveX *= -1; }
         
         data.target->move(moveX, moveY);
@@ -358,91 +368,112 @@ void runApplication::animateBeads(runApplication::AnimationData & data) {
     }
 }
 
-//const void runApplication::animateBeads(runApplication * runner, sf::Sprite * target, const float & startX, float & endX, const float & startY, float & endY, const bool & negativeY, const bool & negativeX, REDRAW_PARAMS_PROTO) {
-//    // make sure both are even or odd
-//    if (fmod(endX, 2) != fmod(startX,2)) { endX += 1; }
-//
-//    // make sure both are even or odd
-//    if (fmod(endY, 2) != fmod(startY,2)) { endY += 1; }
-//
-//    float curX = startX, curY = startY;
-//
-//    while ((endX != curX) || (endY != curY)) {
-//
-//        float moveY = endY != curY ? 2 : 0;
-//        if (negativeY) { moveY *= -1; }
-//        float moveX = endX != curX ? 2 : 0;
-//        if (negativeX) { moveX *= -1; }
-//
-//        target->move(moveX, moveY);
-//        curX = target->getPosition().x;
-//        curY = target->getPosition().y;
-//
-//        runner->redraw(REDRAW_PARAMS);
-//    }
-//}
+inline void runApplication::loopForAnimation(const std::string &oldPocket, sf::Sprite *&target, const std::string &targetKey, REDRAW_PARAMS_PROTO, bool fast) {
+    if (target == NULL) { return; }
+    
+    std::thread animateThread, musicThread;
+    runApplication::AnimationData* data;
+    
+    auto startPos = target->getPosition();
+    float x = determineValidLocation(pocketPositions[targetKey].at(0), pocketPositions[targetKey].at(1));
+    float y = determineValidLocation(pocketPositions[targetKey].at(2), pocketPositions[targetKey].at(3));
+    
+    bool negY = y - startPos.y < 0;
+    bool negX = x - startPos.x < 0;
+    
+    data = new runApplication::AnimationData(this, target, startPos.x, x, startPos.y, y, negY, negX, REDRAW_PARAMS, fast);
+    
+    animateThread = std::thread(& runApplication::animateBeads, data);
+    animateThread.join();
+    
+    gameBoard[oldPocket]->getMarble().pop_front();
+    gameBoard[targetKey]->addMarble(target);
+    
+    delete data;
+    
+}
 
 std::pair<bool,bool> runApplication::disperseBeads(const std::string & pocketName, REDRAW_PARAMS_PROTO) // Beads from chosen pocket are dispersed counterclockwise; function returns 'true' if it lands in a mancala pocket so the player can go again
 {
 	std::string temp = pocketName;
 	bool capture = false;
     
-	for (auto target : gameBoard[pocketName]->getMarble()) {
-		// sound
+//    sf::Thread thread(&MusicPlayer::playMusicAtPath, "Audio/Pickup Marbles.wav");
+//    thread.launch();
+    
+    auto marbles = gameBoard[pocketName]->getMarble();
+	for (auto target : marbles) {
+        
 		pockets::nextPosition(temp, playerNumber);
         
-        runApplication::AnimationData data;
-        float startX = target->getPosition().x;
-        float startY = target->getPosition().y;
-		float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
-		float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
-//        float deltaX = x - startX;
-//		float deltaY = y - startY;
-//		target->move(sf::Vector2f(deltaX, deltaY));
+//        auto startPos = target->getPosition();
+//        float x = determineValidLocation(pocketPositions[temp].at(0), pocketPositions[temp].at(1));
+//        float y = determineValidLocation(pocketPositions[temp].at(2), pocketPositions[temp].at(3));
+//
+//        bool negY = y - startPos.y < 0;
+//        bool negX = x - startPos.x < 0;
+//
+//        data.push_back(new runApplication::AnimationData(this, target, startPos.x, x, startPos.y, y, negY, negX, REDRAW_PARAMS));
+//
+//        threads.push_back(std::thread(& runApplication::animateBeads, data.back()));
+//        threads.back().join();
+//
+//        gameBoard[pocketName]->getMarble().pop_front();
+//        gameBoard[temp]->addMarble(target);
         
-        data.runner = this;
-        data.target = target;
-        data.startX = startX;
-        data.endX = x;
-        data.startY = startY;
-        data.endY = y;
-        data.negativeY = y - startY < 0;
-        data.negativeX = x - startX < 0;
-        data.window = &window;
-        data.statusText = statusText;
-        data.boardSprite = &boardSprite;
-        data.buttonSprite = &buttonSprite;
-        
-        // trying to get this to run at same time for all marbles.
-        // moves marbles as is
-        sf::Thread thread (&runApplication::animateBeads, data);
-        thread.launch();
-        
-		gameBoard[temp]->addMarble(target);
+        loopForAnimation(pocketName, target, temp, REDRAW_PARAMS);
 	}
-	gameBoard[pocketName]->getMarble().clear();
+        
 	if (determineCapture(temp)) {
+        
 		capture = true;
 		std::string opposite = pockets::getOppositeFromKey(temp);
-		for (auto marble : gameBoard[opposite]->getMarble()) {
-			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
-			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
-			float deltaX = x - marble->getPosition().x;
-			float deltaY = y - marble->getPosition().y;
-			marble->move(sf::Vector2f(deltaX, deltaY));
-			gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+        
+        auto oppMarbles = gameBoard[opposite]->getMarble();
+        auto tmpMarbles = gameBoard[temp]->getMarble();
+        
+		for (auto marble : oppMarbles) {
+            
+            loopForAnimation(opposite, marble, playerNumber == 1 ? "P1" : "P2", REDRAW_PARAMS, true);
+            
+//            auto startPos = marble->getPosition();
+//			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
+//
+//			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
+//
+//            bool negY = y - startPos.y < 0;
+//            bool negX = x - startPos.x < 0;
+//
+//            data.push_back(new runApplication::AnimationData(this, marble, startPos.x, x, startPos.y, y, negY, negX, REDRAW_PARAMS, true));
+//
+//            threads.push_back(std::thread(& runApplication::animateBeads, data.back()));
+//            threads.back().join();
+//
+//            gameBoard[opposite]->getMarble().pop_front();
+//            gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+            
 		}
-		for (auto marble : gameBoard[temp]->getMarble()) {
-			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
-			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
-			float deltaX = x - marble->getPosition().x;
-			float deltaY = y - marble->getPosition().y;
-			marble->move(sf::Vector2f(deltaX, deltaY));
-			gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
+        
+		for (auto marble : tmpMarbles) {
+            
+            loopForAnimation(temp, marble, playerNumber == 1 ? "P1" : "P2", REDRAW_PARAMS, true);
+//            auto startPos = marble->getPosition();
+//			float x = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(0), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(1));
+//			float y = determineValidLocation(pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(2), pocketPositions[playerNumber == 1 ? "P1" : "P2"].at(3));
+//
+//            bool negY = y - startPos.y < 0;
+//            bool negX = x - startPos.x < 0;
+//
+//            data.push_back(new runApplication::AnimationData(this, marble, startPos.x, x, startPos.y, y, negY, negX, REDRAW_PARAMS, true));
+//
+//            threads.push_back(std::thread(& runApplication::animateBeads, data.back()));
+//            threads.back().join();
+//
+//            gameBoard[temp]->getMarble().pop_front();
+//			gameBoard[playerNumber == 1 ? "P1" : "P2"]->addMarble(marble);
 		}
-		gameBoard[temp]->getMarble().clear();
-		gameBoard[opposite]->getMarble().clear();
 	}
+
 	return std::make_pair(temp == (playerNumber == 1 ? "P1" : (playerNumber == 2 ? "P2" : "")), capture); // if playerNumber == 1, then P1, else check if playerNumber == 2, then P2 else return false
 }
 
@@ -458,7 +489,7 @@ bool runApplication::determineCapture(const std::string &pocketName) // Checks t
 	return false;
 }
 
-int runApplication::endOfGame(const std::string & emptyThisSide) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
+int runApplication::endOfGame(const std::string & emptyThisSide, REDRAW_PARAMS_PROTO) // returns true if the game is over (i.e.one player doesnt have any beads on their side of the board.
 {
 	int marbleCountSideA = 0,
 		marbleCountSideB = 0;
@@ -467,13 +498,17 @@ int runApplication::endOfGame(const std::string & emptyThisSide) // returns true
 		// empty side A
 		for (auto kv : gameBoard) {
 			if (kv.first.at(0) == 'A') {
-				for (auto marble : kv.second->getMarble()) {
-					float x = determineValidLocation(pocketPositions["P2"].at(0), pocketPositions["P2"].at(1));
-					float y = determineValidLocation(pocketPositions["P2"].at(2), pocketPositions["P2"].at(3));
-					float deltaX = x - marble->getPosition().x;
-					float deltaY = y - marble->getPosition().y;
-					marble->move(sf::Vector2f(deltaX, deltaY));
-					gameBoard["P2"]->addMarble(marble);
+                auto marbles = kv.second->getMarble();
+				for (auto marble : marbles) {
+                    
+                    this->loopForAnimation(kv.first, marble, "P2", REDRAW_PARAMS, true);
+                    
+//					float x = determineValidLocation(pocketPositions["P2"].at(0), pocketPositions["P2"].at(1));
+//					float y = determineValidLocation(pocketPositions["P2"].at(2), pocketPositions["P2"].at(3));
+//					float deltaX = x - marble->getPosition().x;
+//					float deltaY = y - marble->getPosition().y;
+//					marble->move(sf::Vector2f(deltaX, deltaY));
+//					gameBoard["P2"]->addMarble(marble);
 				}
 			}
 		}
@@ -485,13 +520,17 @@ int runApplication::endOfGame(const std::string & emptyThisSide) // returns true
 		// empty side B
 		for (auto kv : gameBoard) {
 			if (kv.first.at(0) == 'B') {
-				for (auto marble : kv.second->getMarble()) {
-					float x = determineValidLocation(pocketPositions["P1"].at(0), pocketPositions["P1"].at(1));
-					float y = determineValidLocation(pocketPositions["P1"].at(2), pocketPositions["P1"].at(3));
-					float deltaX = x - marble->getPosition().x;
-					float deltaY = y - marble->getPosition().y;
-					marble->move(sf::Vector2f(deltaX, deltaY));
-					gameBoard["P1"]->addMarble(marble);
+                auto marbles = kv.second->getMarble();
+				for (auto marble : marbles) {
+                    
+                    this->loopForAnimation(kv.first, marble, "P1", REDRAW_PARAMS, true);
+                    
+//					float x = determineValidLocation(pocketPositions["P1"].at(0), pocketPositions["P1"].at(1));
+//					float y = determineValidLocation(pocketPositions["P1"].at(2), pocketPositions["P1"].at(3));
+//					float deltaX = x - marble->getPosition().x;
+//					float deltaY = y - marble->getPosition().y;
+//					marble->move(sf::Vector2f(deltaX, deltaY));
+//					gameBoard["P1"]->addMarble(marble);
 				}
 			}
 		}
