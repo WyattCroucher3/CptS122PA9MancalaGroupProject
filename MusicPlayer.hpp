@@ -12,8 +12,7 @@
 /// Contains functions that handle sounds throughout game.
 namespace MusicPlayer {
 
-static std::mutex mutex;
-
+static std::mutex musicMutex;
 /// Play music at the path for a certian rep.
 /// Cannot be called using pf::Thread
 ///
@@ -23,7 +22,7 @@ static std::mutex mutex;
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
 inline void playMusic(const std::string & path, const int & count = 1) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     
     sf::Music music;
     
@@ -51,7 +50,7 @@ inline void playMusic(const std::string & path, const int & count = 1) {
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
 inline void playMusicWithV(const std::vector<std::string> & data) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     if (data.size() == 2) {
         playMusic(data.at(0), stoi(data.at(1)));
     } else {
@@ -68,7 +67,7 @@ inline void playMusicWithV(const std::vector<std::string> & data) {
 /// - Warning: Will throw error on failure.
 /// - Version: 1.0
 inline void playMusicAtPath(const std::string & path) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     playMusic(path);
 }
 
@@ -78,7 +77,7 @@ inline void playMusicAtPath(const std::string & path) {
 /// - Postcondition: sound played.
 /// - Version: 1.0
 inline void collectSide(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     playMusic("Audio/Collect Side.wav");
 }
 
@@ -91,7 +90,7 @@ inline void collectSide(void) {
 /// - Parameter count:  the number of marbles that are now in the hole, including the recently added one.
 /// - Version: 1.0
 inline void placeMarble(int & count) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     if (count < 0) { throw Error("Out of range. Value cannot be negative."); }
     
     std::string path = "Audio/Place ";
@@ -117,7 +116,7 @@ inline void placeMarble(int & count) {
 /// - Postcondition: Sound Played
 /// - Version: 1.0
 inline void resetSound(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     playMusic("Audio/Reset.wav");
 }
 
@@ -127,7 +126,7 @@ inline void resetSound(void) {
 /// - Postcondition: sound played.
 /// - Version: 1.0
 inline void setupSound(void) {
-    std::lock_guard<std::mutex> lockguard(MusicPlayer::mutex);
+    std::lock_guard<std::mutex> lockguard(MusicPlayer::musicMutex);
     playMusic("Audio/Setup Marble.wav");
 }
 

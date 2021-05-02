@@ -76,8 +76,13 @@ void runApplication::runApp() {
 			pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ minX, maxX, minY, maxY })));
 
 			for (int index = 0; index < 4; ++index) {
-				float x = rand() % (int)(maxX - minX) + minX;
-				float y = rand() % (int)(maxY - minY) + minY;
+#if defined(WINDOWS)
+                float x = (float)(rand() % (int)(maxX - minX)) + minX;
+                float y = (float)(rand() % (int)(maxY - minY)) + minY;
+#else
+                float x = (float)(arc4random() % (uint32_t)(maxX - minX)) + minX;
+                float y = (float)(arc4random() % (uint32_t)(maxY - minY)) + minY;
+#endif
 				if (index % 2) {
 					kv.second->addMarble(runApplication::marbleTexture1, sf::Vector2f(x, y));
 				}
@@ -88,10 +93,12 @@ void runApplication::runApp() {
 		}
 		else {
 			if (kv.first == "P1") {
-				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+//				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+                pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(275 - pocketOffset) })));
 			}
 			else {
-				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+//				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
+                pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(275 - pocketOffset) })));
 			}
 
 		}
@@ -185,6 +192,9 @@ void runApplication::runApp() {
 
 		// show rules and stop if needed.
 		if (showingRules) {
+#ifndef __APPLE__
+            window.setTitle("Mancala Game - Help Menu");
+#endif
 			window.clear(sf::Color(0, 0, 0, 255)); // Clear old frame
 			window.draw(rulesShape);
 			window.draw(rulesText);
@@ -212,6 +222,7 @@ void runApplication::runApp() {
 
 			//Player indicator
 			sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
+            
 			currentPlayerText.setPosition(60, 317);
 
 			sf::Text rulesIcon("?", this->statusFont, 15);
@@ -225,6 +236,9 @@ void runApplication::runApp() {
 
 			switch (winner) {
 				case 1: {
+#ifndef __APPLE__
+                    window.setTitle("Mancala Game - Player 1 Wins!");
+#endif
 					sf::Text winnerText("Player 1 wins!", this->statusFont, 40);
 					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((140 - winnerText.getGlobalBounds().height) / 2));
 					window.draw(winnerText);
@@ -232,6 +246,9 @@ void runApplication::runApp() {
 					break;
 				}
 				case 2: {
+#ifndef __APPLE__
+                    window.setTitle("Mancala Game - Player 2 Wins!");
+#endif
 					sf::Text winnerText("Player 2 wins!", this->statusFont, 40);
 					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((430 - winnerText.getGlobalBounds().height) / 2));
 					window.draw(winnerText);
@@ -239,6 +256,9 @@ void runApplication::runApp() {
 					break;
 				}
 				case 0: {
+#ifndef __APPLE__
+                    window.setTitle("Mancala Game - Tie!");
+#endif
 					sf::Text winnerText("It's a tie!!", this->statusFont, 40);
 					winnerText.setPosition(((800 - winnerText.getGlobalBounds().width) / 2), ((320 - winnerText.getGlobalBounds().height) / 2));
 					window.draw(winnerText);
@@ -248,14 +268,14 @@ void runApplication::runApp() {
 			}
 		}
 		else {
+#ifndef __APPLE__
+            window.setTitle("Mancala Game");
+#endif
             buttonSprite.setPosition(0, 300);
             this->redraw(REDRAW_PARAMS);
 		}
 	}
 }
-
-
-
 void runApplication::redraw(REDRAW_PARAMS_PROTO) {
     
     std::lock_guard<std::mutex> lockguard(mutex);
@@ -265,27 +285,34 @@ void runApplication::redraw(REDRAW_PARAMS_PROTO) {
     // Draw sprite and pocket counts
     window.draw(boardSprite);
     window.draw(buttonSprite);
-    for (auto kv : /*this->*/gameBoard) {
+    for (auto kv : this->gameBoard) {
         auto marbles = kv.second->getMarble();
         for (auto marble : marbles) {
             window.draw(*marble);
         }
         
         sf::Text temporaryText(std::to_string(marbles.size()), runApplication::pocketFont, 60);
-        temporaryText.setPosition(/*this->*/pocketFontLocations.at(kv.first).first, /*this->*/pocketFontLocations.at(kv.first).second);
+        temporaryText.setPosition(this->pocketFontLocations.at(kv.first).first, this->pocketFontLocations.at(kv.first).second);
         window.draw(temporaryText);
     }
     
     // Draw fonts
     
     //Player indicator
-    sf::Text currentPlayerText("Player Number: " + std::to_string(/*this->*/playerNumber), /*this->*/statusFont, 15);
+    sf::Text currentPlayerText("Player Number: " + std::to_string(this->playerNumber), this->statusFont, 15);
     currentPlayerText.setPosition(60, 317);
+#ifndef __APPLE__
+    std::string p1Score = std::to_string(gameBoard["P1"]->count()), p2Score = std::to_string(gameBoard["P2"]->count());
+
+    std:: string newTitle = "Mancala Game - Player Number: " + std::to_string(this->playerNumber) + " (" + (this->playerNumber == 1 ? p1Score : p2Score) + " vs " + (this->playerNumber == 1 ? p2Score : p1Score) +  ")";
     
-    sf::Text rulesIcon("?", /*this->*/statusFont, 15);
+    window.setTitle(newTitle);
+#endif
+    
+    sf::Text rulesIcon("?", this->statusFont, 15);
     rulesIcon.setPosition(766, 317);
     
-    sf::Text statusBar(statusText, /*this->*/statusFont, 15);
+    sf::Text statusBar(statusText, this->statusFont, 15);
     statusBar.setPosition(430, 317);
     
     window.draw(currentPlayerText);
@@ -314,7 +341,11 @@ void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
 
 inline void runApplication::whoGoesFirst() // Function return a random integer (1 or 2) to determine which player goes first
 {
+#if defined(WINDOWS)
 	playerNumber = rand() % 2 + 1;
+#else
+    playerNumber = arc4random() % 2 + 1;
+#endif
 }
 
 void runApplication::switchTurns() // Function rotates between players after each turn
@@ -558,5 +589,9 @@ int runApplication::endOfGame(const std::string & emptyThisSide, REDRAW_PARAMS_P
 }
 
 inline float runApplication::determineValidLocation(float min, float max) {
+#if defined(WINDOWS)
 	return rand() % (int)(max - min) + min;
+#else
+    return (float)fmod(arc4random(), (max - min)) + min;
+#endif
 }
