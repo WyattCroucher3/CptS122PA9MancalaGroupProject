@@ -93,11 +93,9 @@ void runApplication::runApp() {
 		}
 		else {
 			if (kv.first == "P1") {
-//				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
                 pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)pocketOffset, (float)(80 - pocketOffset), (float)pocketOffset, (float)(275 - pocketOffset) })));
 			}
 			else {
-//				pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(300 - pocketOffset) })));
                 pocketPositions.insert(std::make_pair(kv.first, std::vector<float>({ (float)(700 + pocketOffset), (float)(780 - pocketOffset), (float)pocketOffset, (float)(275 - pocketOffset) })));
 			}
 
@@ -323,7 +321,6 @@ void runApplication::redraw(REDRAW_PARAMS_PROTO) {
     
     window.display(); // Tell app that window is done drawing
     
-//    mutex.unlock();
 }
 
 void runApplication::displayRules(sf::RectangleShape & rect, sf::Text & text)
@@ -352,7 +349,7 @@ inline void runApplication::whoGoesFirst() // Function return a random integer (
 
 void runApplication::switchTurns() // Function rotates between players after each turn
 {
-//    std::lock_guard<std::mutex> lockguard(mutex);
+    std::lock_guard<std::mutex> lockguard(mutex);
 	if (playerNumber == 1)
 	{
 		playerNumber = 2;
@@ -445,21 +442,11 @@ std::pair<bool,bool> runApplication::disperseBeads(const std::string & pocketNam
 	std::string temp = pocketName;
 	bool capture = false;
     
-//    sf::Thread thread(&MusicPlayer::playMusicAtPath, "Audio/Pickup Marbles.wav");
-//    thread.launch();
-    
-//    MusicPlayer::playMusicAtPath("Audio/Pickup Marbles.wav");
-    
-//    std::thread thread(&MusicPlayer::playMusicAtPath, "Audio/Pickup Marbles.wav");
-//    thread.join();
-    
     auto marbles = gameBoard[pocketName]->getMarble();
 	for (auto target : marbles) {
         
 		pockets::nextPosition(temp, playerNumber);
         loopForAnimation(pocketName, target, temp, REDRAW_PARAMS);
-
-        //        if (thread.joinable()) { thread.join(); }
 	}
         
 	if (determineCapture(temp)) {

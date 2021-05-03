@@ -129,7 +129,7 @@ class run_application_unit_tests final {
         
         long success = 0, fail = 0;
         
-        std::cout << "Beginning test on runApplication::endOfGame(std::string) at " << startTime << std::endl;
+        std::cout << "Beginning test on runApplication::switchTurns(void) at " << startTime << std::endl;
         
         runApplication app;
         
@@ -168,9 +168,6 @@ public:
         std::cout << "Run `runTestOnSwitchTurns`... (" << startTime << ")." << std::endl;
         this->runTestOnSwitchTurns();
         std::cout << "Test `runTestOnSwitchTurns` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
-//        std::cout << "Run `runTestOnCreatePocketMap`... (" << startTime << ")." << std::endl;
-//        this->runTestOnCreatePocketMap();
-//        std::cout << "Test `runTestOnCreatePocketMap` finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
         std::cout << "Tests finished after " << (time(0) - startTime) <<  " seconds." << startTime << "." << std::endl;
     }
 };

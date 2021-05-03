@@ -15,21 +15,9 @@ namespace pockets {
 class Pocket {
 protected:
     PocketShape shapeSprite;
-    
-//    Pocket(string & setID) {
-//        //shapeSprite.setID(setID);
-//    }
 public:
     
     virtual ~Pocket(void) {}
-    
-    /// Update the count and image reflecting the new value.
-    ///
-    /// - Precondition: marble was dropped or hole was picked up
-    /// - Postcondition: the value is updated along with image. audio is played at this point.
-    /// - Parameter newCount:  the new count to handle
-    /// - Version: 1.0
-    //    virtual void updateCount(const int & newCount) = 0;
     
     sf::Sprite& addMarble(sf::Texture& newTexture, const sf::Vector2f& newVector) {
         return shapeSprite.addMarble(newTexture, newVector);
@@ -46,24 +34,9 @@ public:
 class MancalaPocket final : public Pocket {
     unsigned int owner;
 public:
-    MancalaPocket(/*string & setID,*/
-                  unsigned int & player) /*: Pocket(setID)*/ {
+    MancalaPocket(unsigned int & player) {
         this->owner = player;
-        //        this->updateCount((int)setCount);
     }
-    
-    /// Update the count and image reflecting the new value.
-    ///
-    /// - Precondition: marble was dropped or hole was picked up
-    /// - Postcondition: the value is updated along with image. audio is played at this point.
-    /// - Parameter newCount:  the new count to handle
-    /// - Version: 1.0
-    //    void updateCount(const int & newCount) override {
-    //        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-    //        thread.launch(); // will run asynchronously
-    //
-    //        this->_count = (unsigned int)newCount;
-    //    }
     
     unsigned long count() const {
         return this->shapeSprite.marbles.size();
@@ -72,26 +45,11 @@ public:
 
 class BoardPocket final : public Pocket {
 public:
-    BoardPocket(/*string & setID*/void)/* : Pocket (setID)*/ {
-        //        this->updateCount((int)setCount);
-    }
+    BoardPocket(void){}
     
     unsigned long count() const {
         return this->shapeSprite.marbles.size();
     }
-    
-    /// Update the count and image reflecting the new value.
-    ///
-    /// - Precondition: marble was dropped or hole was picked up
-    /// - Postcondition: the value is updated along with image. audio is played at this point.
-    /// - Parameter newCount:  the new count to handle
-    /// - Version: 1.0
-    //    void updateCount(const int & newCount) override {
-    //        sf::Thread thread(&MusicPlayer::placeMarble, newCount < 7 ? newCount : 7);
-    //        thread.launch(); // will run asynchronously
-    //
-    //        this->_count = (unsigned int)newCount;
-    //    }
 };
 
 /// Sets up the pockets, adding 6 BoardPockets on each side with 2 MancalaPockets on player sides.
