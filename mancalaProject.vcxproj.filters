@@ -39,6 +39,12 @@
     <ClInclude Include="wraptext.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pockets_method_unit_test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="run_application_unit_tests.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

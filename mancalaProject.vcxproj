@@ -24,7 +24,9 @@
     <ClInclude Include="MusicPlayer.hpp" />
     <ClInclude Include="pockets.hpp" />
     <ClInclude Include="pocketShape.hpp" />
+    <ClInclude Include="pockets_method_unit_test.hpp" />
     <ClInclude Include="RunApplication.hpp" />
+    <ClInclude Include="run_application_unit_tests.hpp" />
     <ClInclude Include="standard.hpp" />
     <ClInclude Include="wraptext.hpp" />
   </ItemGroup>
