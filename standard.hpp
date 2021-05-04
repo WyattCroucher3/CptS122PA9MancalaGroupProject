@@ -8,6 +8,17 @@
 #ifndef standard_hpp
 #define standard_hpp
 
+#if defined(_WIN32) || defined(_WIN64)
+// import Windows-specific libraries as needed
+#define WINDOWS
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // disable secure warnings
+#endif
+#define CLEAR_SCREEN "cls"
+#define RETURN_KEY_UPPER "ENTER"
+#define RETURN_KEY_LOWER "enter"
+#endif
+
 // include SFML Libs
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
